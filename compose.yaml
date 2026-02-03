@@ -1,5 +1,5 @@
 services:
-    laravel.test:
+    shifty.app:
         build:
             context: './docker/8.5'
             dockerfile: Dockerfile
@@ -50,6 +50,7 @@ services:
             timeout: 5s
 networks:
     sail:
+        name: sail
         driver: bridge
 volumes:
     sail-mysql:
