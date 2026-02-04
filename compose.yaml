@@ -19,7 +19,7 @@ services:
         volumes:
             - '.:/var/www/html'
         networks:
-            - sail
+            - shifty-network
         depends_on:
             - mysql
     mysql:
@@ -38,7 +38,7 @@ services:
             - 'sail-mysql:/var/lib/mysql'
             - './docker/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
-            - sail
+            - shifty-network
         healthcheck:
             test:
                 - CMD
@@ -48,8 +48,7 @@ services:
             retries: 3
             timeout: 5s
 networks:
-    sail:
-        name: sail
+    shifty-network:
         driver: bridge
 volumes:
     sail-mysql:
