@@ -49,6 +49,7 @@ services:
             timeout: 5s
 networks:
     shifty-network:
+        name: shifty-network
         driver: bridge
 volumes:
     sail-mysql:
