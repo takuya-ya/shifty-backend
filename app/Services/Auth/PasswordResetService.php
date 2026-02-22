@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Services\Auth;
 
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class PasswordResetService
 {
+    public function __construct(
+        private readonly UserRepository $userRepository
+    ) {}
+
     /**
      * パスワードリセットリンクを送信する
      *
@@ -44,10 +47,7 @@ class PasswordResetService
         $status = Password::reset(
             $data,
             function ($user) use ($data) {
-                $user->forceFill([
-                    'password' => Hash::make($data['password']),
-                    'remember_token' => Str::random(60),
-                ])->save();
+                $this->userRepository->updatePassword($user, $data['password']);
 
                 event(new PasswordReset($user));
             }

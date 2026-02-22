@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserRepository
 {
@@ -29,9 +30,10 @@ class UserRepository
      */
     public function updatePassword(User $user, string $password): bool
     {
-        return $user->update([
+        return $user->forceFill([
             'password' => Hash::make($password),
-        ]);
+            'remember_token' => Str::random(60),
+        ])->save();
     }
 
     /**
