@@ -28,9 +28,8 @@ return new class extends Migration
 
             // 制約
             $table->unique(['staff_id', 'start_at']);
-            $table->foreign('staff_id')->references('id')->on('users')->onDelete('cascade');
-            // 注意: positionsテーブルが未作成の場合は、一旦コメントアウトまたは作成後に再実行
-            // $table->foreign('position_id')->references('id')->on('positions')->onDelete('set null');
+            $table->foreign('staff_id')->references('user_id')->on('staff_profiles')->onDelete('cascade');
+            $table->foreign('position_id')->references('id')->on('positions')->onDelete('set null');
         });
     }
 
