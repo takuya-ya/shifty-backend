@@ -28,7 +28,7 @@ return new class extends Migration
 
             // 制約
             $table->unique(['staff_id', 'start_at']);
-            $table->foreign('staff_id')->references('user_id')->on('staff_profiles')->onDelete('cascade');//
+            $table->foreign('staff_id')->references('user_id')->on('staff_profiles')->onDelete('cascade');
             $table->foreign('position_id')->references('id')->on('positions')->onDelete('set null');
         });
     }
