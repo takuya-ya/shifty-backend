@@ -3,14 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StaffProfile extends Model
 {
-    protected $primaryKey = 'user_id';
-    public $incrementing = false;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',
+        'name',
         'wage',
         'max_hours_per_week',
         'min_days_per_month',
