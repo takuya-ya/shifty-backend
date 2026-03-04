@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('staff_id'); // ユーザーID (staff_profiles.user_id 相当)
+            $table->unsignedBigInteger('staff_id'); // ユーザーID
             $table->dateTime('start_at'); // 勤務開始時刻
             $table->dateTime('end_at');   // 勤務終了時刻
             $table->dateTime('break_start_at')->nullable(); // 休憩開始時刻
@@ -28,7 +28,7 @@ return new class extends Migration
 
             // 制約
             $table->unique(['staff_id', 'start_at']);
-            $table->foreign('staff_id')->references('user_id')->on('staff_profiles')->onDelete('cascade');
+            $table->foreign('staff_id')->references('user_id')->on('staff_profiles')->onDelete('cascade');//
             $table->foreign('position_id')->references('id')->on('positions')->onDelete('set null');
         });
     }
