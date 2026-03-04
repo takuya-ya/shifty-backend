@@ -8,5 +8,6 @@ class WeekdayClosure extends Model
 {
     protected $fillable = [
         'day_of_week',
+        'is_closed',
     ];
 }

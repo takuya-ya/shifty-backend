@@ -8,8 +8,6 @@ class RequiredHeadcount extends Model
 {
     protected $fillable = [
         'day_of_week',
-        'start_at',
-        'end_at',
-        'count',
+        'required_count',
     ];
 }

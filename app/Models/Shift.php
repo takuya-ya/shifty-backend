@@ -15,14 +15,18 @@ class Shift extends Model
         'position_id',
         'start_at',
         'end_at',
-        'status',
+        'break_start_at',
+        'break_end_at',
+        'attendance_type',
+        'shift_state',
         'version',
-        'note',
+        'memo',
     ];
-
     protected $casts = [
         'start_at' => 'datetime',
         'end_at' => 'datetime',
+        'break_start_at' => 'datetime',
+        'break_end_at' => 'datetime',
     ];
 
     public function staffProfile()

@@ -7,7 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class NotificationSetting extends Model
 {
     protected $fillable = [
-        'email_enabled',
-        'browser_enabled',
+        'deadline_days_before',
+        'open_days_before',
+        'send_open_notification',
+        'send_deadline_remind',
+        'deadline_remind_days_before',
+        'updated_by',
+        'send_open_notification',
+        'send_deadline_remind',
+        'deadline_remind_days_before',
+        'updated_by',
     ];
 }

@@ -12,10 +12,11 @@ class StaffProfile extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'wage',
-        'max_hours_per_week',
-        'min_days_per_month',
-        'max_days_per_month',
+        'hourly_wage',
+        'is_student',
+        'date_of_birth',
+        'memo',
+        'max_consecutive_days',
     ];
 
     public function user()
