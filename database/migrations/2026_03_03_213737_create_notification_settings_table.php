@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications_settings', function (Blueprint $table) {
+        Schema::create('notification_settings', function (Blueprint $table) {
             $table->id();
             $table->integer('deadline_days_before')->comment('締切日');
             $table->integer('open_days_before')->comment('受付開始日');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications_settings');
+        Schema::dropIfExists('notification_settings');
     }
 };
