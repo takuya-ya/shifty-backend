@@ -31,6 +31,6 @@ class StaffProfile extends Model
 
     public function shifts()
     {
-        return $this->hasMany(Shift::class, 'staff_id', 'user_id');
+        return $this->hasMany(Shift::class, 'staff_id');
     }
 }

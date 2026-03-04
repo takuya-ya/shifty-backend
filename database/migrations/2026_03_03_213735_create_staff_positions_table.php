@@ -17,7 +17,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->primary(['staff_id', 'position_id']);
-            $table->foreign('staff_id')->references('user_id')->on('staff_profiles')->onDelete('cascade');
+            $table->foreign('staff_id')->references('id')->on('staff_profiles')->onDelete('cascade');
             $table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade');
         });
     }

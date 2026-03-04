@@ -31,7 +31,7 @@ class Shift extends Model
 
     public function staffProfile()
     {
-        return $this->belongsTo(StaffProfile::class, 'staff_id', 'user_id');
+        return $this->belongsTo(StaffProfile::class, 'staff_id');
     }
 
     public function position()
