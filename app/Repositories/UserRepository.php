@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -37,16 +38,24 @@ class UserRepository
     }
 
     /**
-     * 新しいユーザーを作成する
+     * 新しいユーザーを作成する (StaffProfile も同時に作成)
      *
      * @param array $data
      * @return User
      */
     public function create(array $data): User
     {
-        return User::create([
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return DB::transaction(function () use ($data) {
+            $user = User::create([
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+            ]);
+
+            $user->staffProfile()->create([
+                'name' => $data['name'],
+            ]);
+
+            return $user;
+        });
     }
 }
