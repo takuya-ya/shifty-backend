@@ -60,4 +60,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Role::class, 'user_roles');
     }
+
+    /**
+     * Get the user's name from staff profile.
+     *
+     * @return string|null
+     */
+    public function getNameAttribute(): ?string
+    {
+        return $this->staffProfile?->name;
+    }
 }

@@ -12,6 +12,5 @@ class Setting extends Model
         'day_start_time',
         'day_end_time',
         'initial_view_days',
-
     ];
 }
