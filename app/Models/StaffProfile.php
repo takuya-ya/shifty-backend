@@ -17,6 +17,7 @@ class StaffProfile extends Model
         'date_of_birth',
         'memo',
         'max_consecutive_days',
+        'max_hours_per_week',
     ];
 
     public function user()
