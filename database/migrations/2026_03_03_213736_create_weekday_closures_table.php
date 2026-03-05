@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('weekday_closures', function (Blueprint $table) {
-            $table->unsignedTinyInteger('day_of_week')->primary()->comment('0=日〜6=土');
+            $table->id();
+            $table->unsignedTinyInteger('day_of_week')->unique()->comment('0=日〜6=土');
             $table->boolean('is_closed')->default(false)->comment('店休日フラグ');
             $table->timestamps();
         });
