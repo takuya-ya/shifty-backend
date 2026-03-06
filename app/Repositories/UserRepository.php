@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -45,17 +44,15 @@ class UserRepository
      */
     public function create(array $data): User
     {
-        return DB::transaction(function () use ($data) {
-            $user = User::create([
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-            ]);
+        $user = User::create([
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
 
-            $user->staffProfile()->create([
-                'name' => $data['name'],
-            ]);
+        $user->staffProfile()->create([
+            'name' => $data['name'],
+        ]);
 
-            return $user;
-        });
+        return $user;
     }
 }
