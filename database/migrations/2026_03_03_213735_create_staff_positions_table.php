@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('staff_positions', function (Blueprint $table) {
             $table->unsignedBigInteger('staff_id');
             $table->unsignedBigInteger('position_id');
-            $table->timestamps();
 
             $table->primary(['staff_id', 'position_id']);
             $table->foreign('staff_id')->references('id')->on('staff_profiles')->onDelete('cascade');
