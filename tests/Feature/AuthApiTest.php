@@ -16,10 +16,13 @@ class AuthApiTest extends TestCase
         parent::setUp();
 
         // テストユーザーの作成
-        User::factory()->create([
-            'name' => 'Test User',
+        $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
+        ]);
+
+        $user->staffProfile()->create([
+            'name' => 'Test User',
         ]);
     }
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('staff_id'); // ユーザーID
+            $table->unsignedBigInteger('staff_id'); // スタッフプロフィールID
             $table->dateTime('start_at'); // 勤務開始時刻
             $table->dateTime('end_at');   // 勤務終了時刻
             $table->dateTime('break_start_at')->nullable(); // 休憩開始時刻
