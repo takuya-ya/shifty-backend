@@ -38,14 +38,7 @@ class AuthApiTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response->assertStatus(200)
-            ->assertJson([
-                'message' => 'ログインしました。',
-            ])
-            ->assertJsonStructure([
-                'user' => ['id', 'name', 'email'],
-                'message',
-            ]);
+        $response->assertNoContent();
 
         $this->assertAuthenticatedAs(User::where('email', 'test@example.com')->first());
     }
@@ -100,7 +93,6 @@ class AuthApiTest extends TestCase
             ])
             ->postJson('/api/logout');
 
-        $response->assertStatus(200)
-            ->assertJson(['message' => 'ログアウトしました。']);
+        $response->assertNoContent();
     }
 }
