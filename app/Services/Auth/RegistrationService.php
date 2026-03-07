@@ -30,10 +30,12 @@ class RegistrationService
 
             // デフォルトロール (Store Admin) を付与
             $role = Role::where('name', Role::ROLE_STORE_ADMIN)->first();
-            if ($role) {
-                $user->roles()->attach($role->id);
+            if (!$role) {
+                throw new \RuntimeException('デフォルトロールが存在しません');
             }
 
+            $user->roles()->attach($role->id);
+            
             event(new Registered($user));
 
             Auth::login($user);
