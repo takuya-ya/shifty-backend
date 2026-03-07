@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment('権限名: Super Admin, Store Admin, Staff など');
+            $table->string('name')->unique()->comment('権限名: Super Admin, Store Admin, Staff など');
             $table->timestamps();
         });
     }
