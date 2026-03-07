@@ -39,8 +39,15 @@ class AuthenticationTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post('/api/logout');
+        // 実際のログインフローを通してセッションを確立する
+        $this->postJson('/api/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ])->assertNoContent();
 
-        $response->assertNoContent();
+        $this->postJson('/api/logout')->assertNoContent();
+
+        // 同一セッションで保護APIにアクセスし、未認証で弾かれることを確認する
+        $this->getJson('/api/user')->assertUnauthorized();
     }
 }
