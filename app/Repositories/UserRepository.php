@@ -46,7 +46,7 @@ class UserRepository
     {
         $user = User::create([
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => $data['password'],
         ]);
 
         $user->staffProfile()->create([
