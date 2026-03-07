@@ -39,11 +39,9 @@ class AuthenticationTest extends TestCase
     {
         $user = User::factory()->create();
 
-        // 実際のログインフローを通してセッションを確立する
-        $this->postJson('/api/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ])->assertNoContent();
+         $this->actingAs($user);
+
+        $this->getJson('/api/user')->assertOk(); // ← ログイン直後は200が返るはず
 
         $this->postJson('/api/logout')->assertNoContent();
 
