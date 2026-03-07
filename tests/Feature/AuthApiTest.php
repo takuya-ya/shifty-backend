@@ -77,6 +77,7 @@ class AuthApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'email' => 'test@example.com',
+                'name' => 'Test User',
             ]);
     }
 
