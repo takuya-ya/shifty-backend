@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('open_days_before')->comment('受付開始日');
             $table->boolean('send_open_notification')->default(false);
             $table->boolean('send_deadline_remind')->default(false);
-            $table->integer('deadline_remind_days_before');
+            $table->integer('deadline_remind_days_before')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
 
