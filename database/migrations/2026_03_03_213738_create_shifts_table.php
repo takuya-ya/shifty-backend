@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('version')->default(1); // 楽観的ロック用バージョン
             $table->text('memo')->nullable(); // メモ
             $table->timestamps();
+            $table->softDeletes(); // ソフトデリート
 
             // 制約
             $table->unique(['staff_id', 'start_at']);
