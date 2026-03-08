@@ -39,7 +39,7 @@ class AuthenticationTest extends TestCase
     {
         $user = User::factory()->create();
 
-         $this->actingAs($user);
+        $this->actingAs($user);
 
         $this->getJson('/api/user')->assertOk(); // ← ログイン直後は200が返るはず
 
