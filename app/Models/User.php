@@ -23,13 +23,6 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * The relations to eager load on every query.
-     *
-     * @var array<string>
-     */
-    protected $with = ['staffProfile'];
-
-    /**
      * The accessors to append to the model's array form.
      *
      * @var array<string>
