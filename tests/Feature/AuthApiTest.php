@@ -16,10 +16,13 @@ class AuthApiTest extends TestCase
         parent::setUp();
 
         // テストユーザーの作成
-        User::factory()->create([
-            'name' => 'Test User',
+        $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
+        ]);
+
+        $user->staffProfile()->create([
+            'name' => 'Test User',
         ]);
     }
 
@@ -35,14 +38,7 @@ class AuthApiTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response->assertStatus(200)
-            ->assertJson([
-                'message' => 'ログインしました。',
-            ])
-            ->assertJsonStructure([
-                'user' => ['id', 'name', 'email'],
-                'message',
-            ]);
+        $response->assertNoContent();
 
         $this->assertAuthenticatedAs(User::where('email', 'test@example.com')->first());
     }
@@ -81,6 +77,7 @@ class AuthApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'email' => 'test@example.com',
+                'name' => 'Test User',
             ]);
     }
 
@@ -97,7 +94,6 @@ class AuthApiTest extends TestCase
             ])
             ->postJson('/api/logout');
 
-        $response->assertStatus(200)
-            ->assertJson(['message' => 'ログアウトしました。']);
+        $response->assertNoContent();
     }
 }

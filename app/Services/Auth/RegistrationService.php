@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services\Auth;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RegistrationService
 {
@@ -23,12 +25,22 @@ class RegistrationService
      */
     public function register(array $data): User
     {
-        $user = $this->userRepository->create($data);
+        return DB::transaction(function () use ($data) {
+            $user = $this->userRepository->create($data);
 
-        event(new Registered($user));
+            // デフォルトロール (Store Admin) を付与
+            $role = Role::where('name', Role::ROLE_STORE_ADMIN)->first();
+            if (!$role) {
+                throw new \RuntimeException('デフォルトロールが存在しません');
+            }
 
-        Auth::login($user);
+            $user->roles()->attach($role->id);
+            
+            event(new Registered($user));
 
-        return $user;
+            Auth::login($user);
+
+            return $user;
+        });
     }
 }

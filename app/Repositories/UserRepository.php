@@ -37,17 +37,22 @@ class UserRepository
     }
 
     /**
-     * 新しいユーザーを作成する
+     * 新しいユーザーを作成する (StaffProfile も同時に作成)
      *
      * @param array $data
      * @return User
      */
     public function create(array $data): User
     {
-        return User::create([
-            'name' => $data['name'],
+        $user = User::create([
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => $data['password'],
         ]);
+
+        $user->staffProfile()->create([
+            'name' => $data['name'],
+        ]);
+
+        return $user;
     }
 }

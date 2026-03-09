@@ -18,10 +18,23 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var list<string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
     ];
+
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array<string>
+     */
+    protected $with = ['staffProfile'];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<string>
+     */
+    protected $appends = ['name'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -44,5 +57,31 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the staff profile associated with the user.
+     */
+    public function staffProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(StaffProfile::class, 'user_id');
+    }
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function roles(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    /**
+     * Get the user's name from staff profile.
+     *
+     * @return string|null
+     */
+    public function getNameAttribute(): ?string
+    {
+        return $this->staffProfile?->name;
     }
 }
