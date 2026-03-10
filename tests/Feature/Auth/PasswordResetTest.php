@@ -19,7 +19,7 @@ class PasswordResetTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->post('/api/forgot-password', ['email' => $user->email]);
+        $this->post('/api/v1/forgot-password', ['email' => $user->email]);
 
         Notification::assertSentTo($user, ResetPassword::class);
     }
@@ -30,7 +30,7 @@ class PasswordResetTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->post('/api/forgot-password', ['email' => $user->email]);
+        $this->post('/api/v1/forgot-password', ['email' => $user->email]);
 
         // 通知からトークンを取得
         $token = '';
@@ -39,7 +39,7 @@ class PasswordResetTest extends TestCase
             return true;
         });
 
-        $response = $this->post('/api/reset-password', [
+        $response = $this->post('/api/v1/reset-password', [
             'token' => $token,
             'email' => $user->email,
             'password' => 'newPassword123',

@@ -14,7 +14,7 @@ class AuthenticationTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->post('/api/login', [
+        $response = $this->post('/api/v1/login', [
             'email' => $user->email,
             'password' => 'password',
         ]);
@@ -27,7 +27,7 @@ class AuthenticationTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->post('/api/login', [
+        $this->post('/api/v1/login', [
             'email' => $user->email,
             'password' => 'wrong-password',
         ]);
@@ -41,11 +41,11 @@ class AuthenticationTest extends TestCase
 
         $this->actingAs($user);
 
-        $this->getJson('/api/user')->assertOk(); // ← ログイン直後は200が返るはず
+        $this->getJson('/api/v1/user')->assertOk(); // ← ログイン直後は200が返るはず
 
-        $this->postJson('/api/logout')->assertNoContent();
+        $this->postJson('/api/v1/logout')->assertNoContent();
 
         // 同一セッションで保護APIにアクセスし、未認証で弾かれることを確認する
-        $this->getJson('/api/user')->assertUnauthorized();
+        $this->getJson('/api/v1/user')->assertUnauthorized();
     }
 }
