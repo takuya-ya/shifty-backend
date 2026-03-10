@@ -9,10 +9,6 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/hello', function (Request $request) {
-    return response()->json(['message' => 'Hello from Laravel']);
-});
-
 Route::prefix('v1')->group(function () {
     // ゲスト向け認証ルート
     Route::middleware('guest')->group(function () {
