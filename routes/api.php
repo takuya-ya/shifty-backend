@@ -17,26 +17,26 @@ Route::prefix('v1')->group(function () {
     // ゲスト向け認証ルート
     Route::middleware('guest')->group(function () {
         Route::post('/register', [RegisteredUserController::class, 'store'])
-            ->name('api.v1.auth.register');
+            ->name('api.v1.register');
 
         Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-            ->name('api.v1.auth.login');
+            ->name('api.v1.login');
 
         Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-            ->name('api.v1.auth.password.email');
+            ->name('api.v1.password.send-reset-link');
 
         Route::post('/reset-password', [NewPasswordController::class, 'store'])
-            ->name('api.v1.auth.password.store');
+            ->name('api.v1.password.reset');
     });
 
     // 認証済みユーザー向けルート
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user', function (Request $request) {
             return $request->user()->load('staffProfile');
-        })->name('api.v1.auth.user');
+        })->name('api.v1.user');
 
         Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-            ->name('api.v1.auth.logout');
+            ->name('api.v1.logout');
 
         // メール認証ルート（Laravel既定のルート名を維持）
         Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
