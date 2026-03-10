@@ -14,32 +14,37 @@ Route::get('/hello', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
-    Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-        return $request->user()->load('staffProfile');
+    // ゲスト向け認証ルート
+    Route::middleware('guest')->group(function () {
+        Route::post('/register', [RegisteredUserController::class, 'store'])
+            ->name('api.v1.auth.register');
+
+        Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+            ->name('api.v1.auth.login');
+
+        Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+            ->name('api.v1.auth.password.email');
+
+        Route::post('/reset-password', [NewPasswordController::class, 'store'])
+            ->name('api.v1.auth.password.store');
     });
 
-    // API認証ルート
-    Route::post('/register', [RegisteredUserController::class, 'store'])
-        ->middleware('guest');
+    // 認証済みユーザー向けルート
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/user', function (Request $request) {
+            return $request->user()->load('staffProfile');
+        })->name('api.v1.auth.user');
 
-    Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-        ->middleware('guest');
+        Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+            ->name('api.v1.auth.logout');
 
-    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-        ->middleware('guest');
+        // メール認証ルート（Laravel既定のルート名を維持）
+        Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
+            ->middleware(['signed', 'throttle:6,1'])
+            ->name('verification.verify');
 
-    Route::post('/reset-password', [NewPasswordController::class, 'store'])
-        ->middleware('guest');
-
-    // メール認証ルート
-    Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
-        ->middleware(['auth:sanctum', 'signed', 'throttle:6,1'])
-        ->name('verification.verify');
-
-    Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-        ->middleware(['auth:sanctum', 'throttle:6,1'])
-        ->name('verification.send');
-
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->middleware('auth:sanctum');
+        Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+            ->middleware('throttle:6,1')
+            ->name('verification.send');
+    });
 });
