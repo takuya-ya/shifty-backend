@@ -33,7 +33,7 @@ class AuthApiTest extends TestCase
     {
         $response = $this->withHeaders([
             'Referer' => 'http://localhost:5173',
-        ])->postJson('/api/login', [
+        ])->postJson('/api/v1/login', [
             'email' => 'test@example.com',
             'password' => 'password',
         ]);
@@ -50,7 +50,7 @@ class AuthApiTest extends TestCase
     {
         $response = $this->withHeaders([
             'Referer' => 'http://localhost:5173',
-        ])->postJson('/api/login', [
+        ])->postJson('/api/v1/login', [
             'email' => 'test@example.com',
             'password' => 'wrong-password',
         ]);
@@ -72,7 +72,7 @@ class AuthApiTest extends TestCase
             ->withHeaders([
                 'Referer' => 'http://localhost:5173',
             ])
-            ->getJson('/api/user');
+            ->getJson('/api/v1/user');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -92,7 +92,7 @@ class AuthApiTest extends TestCase
             ->withHeaders([
                 'Referer' => 'http://localhost:5173',
             ])
-            ->postJson('/api/logout');
+            ->postJson('/api/v1/logout');
 
         $response->assertNoContent();
     }
