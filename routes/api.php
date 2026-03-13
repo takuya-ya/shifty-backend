@@ -5,11 +5,20 @@ use App\Http\Controllers\Auth\ResendVerificationEmailController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Test\ApiResponseSandboxController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
+    if (app()->environment('local', 'testing')) {
+        Route::get('/_debug/api-response/success', [ApiResponseSandboxController::class, 'successSample'])
+            ->name('api.v1.debug.api-response.success');
+
+        Route::get('/_debug/api-response/error', [ApiResponseSandboxController::class, 'errorSample'])
+            ->name('api.v1.debug.api-response.error');
+    }
+
     // ゲスト向け認証ルート
     Route::middleware('guest')->group(function () {
         Route::post('/register', [RegisteredUserController::class, 'store'])
