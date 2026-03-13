@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
@@ -8,15 +9,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LocalOnly
 {
-  /**
-   * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-   */
-  public function handle(Request $request, Closure $next): Response
-  {
-    if (! app()->environment('local', 'testing')) {
-      return response()->json(['message' => 'Forbidden.'], 403);
-    }
+    /**
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        if (! app()->environment('local', 'testing')) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
 
-    return $next($request);
-  }
+        return $next($request);
+    }
 }
