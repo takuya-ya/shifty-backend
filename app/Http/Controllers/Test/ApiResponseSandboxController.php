@@ -9,20 +9,20 @@ use Illuminate\Http\JsonResponse;
 
 final class ApiResponseSandboxController extends Controller
 {
-  public function successSample(): JsonResponse
-  {
-    return $this->success(
-      data: ['sample' => true, 'version' => 'v1'],
-      message: 'success sample',
-    );
-  }
+    public function successSample(): JsonResponse
+    {
+        return $this->success(
+            data: ['sample' => true, 'version' => 'v1'],
+            message: 'success sample',
+        );
+    }
 
-  public function errorSample(): JsonResponse
-  {
-    return $this->error(
-      message: 'validation failed',
-      errors: ['email' => ['The email field is required.']],
-      status: 422,
-    );
-  }
+    public function errorSample(): JsonResponse
+    {
+        return $this->error(
+            message: 'validation failed',
+            errors: ['email' => ['The email field is required.']],
+            status: 422,
+        );
+    }
 }

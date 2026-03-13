@@ -6,6 +6,6 @@ namespace App\Http\Responses;
 
 enum ApiResponseStatus: string
 {
-  case Success = 'success';
-  case Error = 'error';
+    case Success = 'success';
+    case Error = 'error';
 }
