@@ -40,7 +40,7 @@ final class ApiExceptionRenderer
             $status = $throwable->getStatusCode();
             $message = $throwable->getMessage() !== ''
                 ? $throwable->getMessage()
-                : (Response::$statusTexts[$status] ?? 'Error');
+                : ($status === 404 ? 'Not found' : (Response::$statusTexts[$status] ?? 'Error'));
         }
 
         return response()->json(
