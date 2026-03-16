@@ -14,7 +14,7 @@ class ApiExceptionResponseShapeTest extends TestCase
 {
   protected function setUp(): void
   {
-    parent::setUp();
+      parent::setUp();
 
     Route::middleware('api')->prefix('api/v1/_test-exceptions')->group(function (): void {
       Route::get('/422', function (): void {
@@ -65,13 +65,13 @@ class ApiExceptionResponseShapeTest extends TestCase
   private function assertCommonErrorShape($response, int $statusCode): void
   {
     $response->assertStatus($statusCode)
-      ->assertJsonStructure([
-        'status',
-        'data',
-        'message',
-        'errors',
-      ])
-      ->assertJsonPath('status', 'error')
-      ->assertJsonPath('data', null);
+          ->assertJsonStructure([
+              'status',
+              'data',
+              'message',
+              'errors',
+          ])
+          ->assertJsonPath('status', 'error')
+          ->assertJsonPath('data', null);
   }
 }

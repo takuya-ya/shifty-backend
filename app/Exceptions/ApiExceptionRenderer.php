@@ -16,46 +16,46 @@ use Throwable;
 
 final class ApiExceptionRenderer
 {
-  public function render(Throwable $throwable, Request $request): ?Response
-  {
-    if (! $this->shouldRenderAsJson($request)) {
-      return null;
+    public function render(Throwable $throwable, Request $request): ?Response
+    {
+        if (! $this->shouldRenderAsJson($request)) {
+            return null;
+        }
+
+        $status = 500;
+        $message = 'Server Error';
+        $errors = null;
+
+        if ($throwable instanceof ValidationException) {
+            $status = 422;
+            $message = $throwable->getMessage() !== '' ? $throwable->getMessage() : 'The given data was invalid.';
+            $errors = $throwable->errors();
+        } elseif ($throwable instanceof AuthenticationException) {
+            $status = 401;
+            $message = 'Unauthenticated.';
+        } elseif ($throwable instanceof AuthorizationException) {
+            $status = 403;
+            $message = $throwable->getMessage() !== '' ? $throwable->getMessage() : 'This action is unauthorized.';
+        } elseif ($throwable instanceof HttpExceptionInterface) {
+            $status = $throwable->getStatusCode();
+            $message = $throwable->getMessage() !== ''
+                ? $throwable->getMessage()
+                : (Response::$statusTexts[$status] ?? 'Error');
+        }
+
+        return response()->json(
+            new ApiResponsePayload(
+                status: ApiResponseStatus::Error,
+                data: null,
+                message: $message,
+                errors: $errors,
+            ),
+            $status,
+        );
     }
 
-    $status = 500;
-    $message = 'Server Error';
-    $errors = null;
-
-    if ($throwable instanceof ValidationException) {
-      $status = 422;
-      $message = $throwable->getMessage() !== '' ? $throwable->getMessage() : 'The given data was invalid.';
-      $errors = $throwable->errors();
-    } elseif ($throwable instanceof AuthenticationException) {
-      $status = 401;
-      $message = 'Unauthenticated.';
-    } elseif ($throwable instanceof AuthorizationException) {
-      $status = 403;
-      $message = $throwable->getMessage() !== '' ? $throwable->getMessage() : 'This action is unauthorized.';
-    } elseif ($throwable instanceof HttpExceptionInterface) {
-      $status = $throwable->getStatusCode();
-      $message = $throwable->getMessage() !== ''
-        ? $throwable->getMessage()
-        : (Response::$statusTexts[$status] ?? 'Error');
+    private function shouldRenderAsJson(Request $request): bool
+    {
+        return $request->expectsJson() || $request->is('api/*');
     }
-
-    return response()->json(
-      new ApiResponsePayload(
-        status: ApiResponseStatus::Error,
-        data: null,
-        message: $message,
-        errors: $errors,
-      ),
-      $status,
-    );
-  }
-
-  private function shouldRenderAsJson(Request $request): bool
-  {
-    return $request->expectsJson() || $request->is('api/*');
-  }
 }
