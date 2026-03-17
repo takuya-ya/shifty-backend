@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Exceptions;
 
-use App\Http\Requests\Test\TestFormRequest;
+use App\Exceptions\ApiExceptionRenderer;
+use Tests\Support\TestFormRequest;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,7 @@ class ApiExceptionResponseShapeTest extends TestCase
                 ]);
             });
 
-            Route::post('/422-form-request', function (TestFormRequest $request): void {
+            Route::post('/422-form-request', function (\Tests\Support\TestFormRequest $request): void {
                 // Validation handled by FormRequest
             });
 
@@ -46,6 +47,12 @@ class ApiExceptionResponseShapeTest extends TestCase
             Route::get('/401', function (): string {
                 return 'ok';
             })->middleware('auth:sanctum');
+            Route::get('/422-string-error', function (): void {
+                throw ValidationException::withMessages([
+                    'field1' => 'Single string error message',
+                    'field2' => ['Array message 1', 'Array message 2'],
+                ]);
+            });
         });
     }
 
@@ -75,13 +82,6 @@ class ApiExceptionResponseShapeTest extends TestCase
     public function test_validation_errors_are_always_normalized_to_arrays(): void
     {
         // 手動で文字列のメッセージを持つ ValidationException を投げる
-        Route::get('/api/v1/_test-exceptions/422-string-error', function (): void {
-            throw ValidationException::withMessages([
-                'field1' => 'Single string error message',
-                'field2' => ['Array message 1', 'Array message 2'],
-            ]);
-        });
-
         $response = $this->getJson('/api/v1/_test-exceptions/422-string-error');
 
         $response->assertStatus(422)
