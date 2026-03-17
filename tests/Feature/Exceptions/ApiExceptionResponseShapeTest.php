@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Exceptions;
 
-use App\Exceptions\ApiExceptionRenderer;
 use Tests\Support\TestFormRequest;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
@@ -22,7 +21,7 @@ class ApiExceptionResponseShapeTest extends TestCase
         Route::middleware('api')->prefix('api/v1/_test-exceptions')->group(function (): void {
             Route::post('/422-validate', function (Request $request): void {
                 $request->validate([
-                    'email' => 'required|email',
+                    'email' => ['required', 'email'],
                 ]);
             });
 

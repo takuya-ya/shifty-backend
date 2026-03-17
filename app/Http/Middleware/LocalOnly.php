@@ -21,7 +21,7 @@ class LocalOnly
                 new ApiResponsePayload(
                     status: ApiResponseStatus::Error,
                     data: null,
-                    message: 'This action is unauthorized.',
+                    message: Response::$statusTexts[403] ?? 'Forbidden',
                     errors: null,
                 ),
                 403,
