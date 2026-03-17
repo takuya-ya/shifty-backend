@@ -29,7 +29,7 @@ class LocalOnlyTest extends TestCase
             ])
             ->assertJsonPath('status', 'error')
             ->assertJsonPath('data', null)
-            ->assertJsonPath('message', 'This action is unauthorized.')
+            ->assertJsonPath('message', 'Forbidden')
             ->assertJsonPath('errors', null);
     }
 }
