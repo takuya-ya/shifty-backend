@@ -28,7 +28,13 @@ final class ApiExceptionRenderer
 
         if ($throwable instanceof ValidationException) {
             $status = 422;
-            $message = 'Validation failed';
+            // 本番環境では常にデフォルトメッセージ、非本番ではカスタムメッセージ優先
+            if (app()->isProduction()) {
+                $message = 'Validation failed';
+            } else {
+                $customMessage = $throwable->getMessage();
+                $message = $customMessage !== '' ? $customMessage : 'Validation failed';
+            }
             $errors = $this->normalizeValidationErrors($throwable->errors());
         } elseif ($throwable instanceof AuthenticationException) {
             $status = 401;
