@@ -69,6 +69,27 @@ class ApiExceptionResponseShapeTest extends TestCase
             ->assertJsonPath('errors.email', ['The email field is required.']);
     }
 
+    /**
+     * @see ApiExceptionRenderer::normalizeValidationErrors
+     */
+    public function test_validation_errors_are_always_normalized_to_arrays(): void
+    {
+        // 手動で文字列のメッセージを持つ ValidationException を投げる
+        Route::get('/api/v1/_test-exceptions/422-string-error', function (): void {
+            throw ValidationException::withMessages([
+                'field1' => 'Single string error message',
+                'field2' => ['Array message 1', 'Array message 2'],
+            ]);
+        });
+
+        $response = $this->getJson('/api/v1/_test-exceptions/422-string-error');
+
+        $response->assertStatus(422)
+            ->assertJsonPath('message', 'Validation failed')
+            ->assertJsonPath('errors.field1', ['Single string error message']) // 配列に正規化されていること
+            ->assertJsonPath('errors.field2', ['Array message 1', 'Array message 2']);
+    }
+
     public function test_response_shape_is_same_for_401(): void
     {
         $this->assertCommonErrorShape($this->get('/api/v1/_test-exceptions/401'), 401);
