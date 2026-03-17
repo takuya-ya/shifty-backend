@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Exceptions;
 
+use App\Http\Requests\Test\TestFormRequest;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;
@@ -17,6 +19,16 @@ class ApiExceptionResponseShapeTest extends TestCase
         parent::setUp();
 
         Route::middleware('api')->prefix('api/v1/_test-exceptions')->group(function (): void {
+            Route::post('/422-validate', function (Request $request): void {
+                $request->validate([
+                    'email' => 'required|email',
+                ]);
+            });
+
+            Route::post('/422-form-request', function (TestFormRequest $request): void {
+                // Validation handled by FormRequest
+            });
+
             Route::get('/422', function (): void {
                 throw ValidationException::withMessages([
                     'email' => ['The email field is required.'],
@@ -40,6 +52,21 @@ class ApiExceptionResponseShapeTest extends TestCase
     public function test_response_shape_is_same_for_422(): void
     {
         $this->assertCommonErrorShape($this->get('/api/v1/_test-exceptions/422'), 422);
+    }
+
+    public function test_response_shape_is_consistent_between_validate_and_form_request(): void
+    {
+        // 1. validate() 経由
+        $response1 = $this->postJson('/api/v1/_test-exceptions/422-validate', []);
+        $this->assertCommonErrorShape($response1, 422);
+        $response1->assertJsonPath('message', 'Validation failed')
+            ->assertJsonPath('errors.email', ['The email field is required.']);
+
+        // 2. FormRequest 経由
+        $response2 = $this->postJson('/api/v1/_test-exceptions/422-form-request', []);
+        $this->assertCommonErrorShape($response2, 422);
+        $response2->assertJsonPath('message', 'Validation failed')
+            ->assertJsonPath('errors.email', ['The email field is required.']);
     }
 
     public function test_response_shape_is_same_for_401(): void
