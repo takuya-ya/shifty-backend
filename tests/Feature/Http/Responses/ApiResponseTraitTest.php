@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Http\Responses;
+namespace Tests\Feature\Http\Responses;
 
 use App\Http\Responses\ApiResponsePayload;
 use App\Http\Responses\ApiResponseStatus;
 use App\Http\Responses\ApiResponseTrait;
-
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 /**
- * ApiResponseTrait のユニットテスト。
+ * ApiResponseTrait のFeatureテスト。
  *
- * レスポンスジェネレーション機能がテスト可能であることを検証します。
+ * Laravelコンテナが初期化された状態で
+ * レスポンスジェネレーション機能を検証します。
  */
 class ApiResponseTraitTest extends TestCase
 {
