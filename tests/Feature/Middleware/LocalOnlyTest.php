@@ -19,6 +19,17 @@ class LocalOnlyTest extends TestCase
     {
         $this->app['env'] = 'production';
 
-        $this->getJson('/api/v1/_debug/api-response/success')->assertStatus(403);
+        $this->getJson('/api/v1/_debug/api-response/success')
+            ->assertStatus(403)
+            ->assertJsonStructure([
+                'status',
+                'data',
+                'message',
+                'errors',
+            ])
+            ->assertJsonPath('status', 'error')
+            ->assertJsonPath('data', null)
+            ->assertJsonPath('message', 'This action is unauthorized.')
+            ->assertJsonPath('errors', null);
     }
 }
