@@ -26,7 +26,7 @@ class ApiExceptionResponseShapeTest extends TestCase
                 ]);
             });
 
-            Route::post('/422-form-request', function (\Tests\Support\TestFormRequest $request): void {
+            Route::post('/422-form-request', function (TestFormRequest $request): void {
                 // Validation handled by FormRequest
             });
 
