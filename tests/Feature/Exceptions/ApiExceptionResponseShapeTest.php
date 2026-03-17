@@ -66,13 +66,13 @@ class ApiExceptionResponseShapeTest extends TestCase
         // 1. validate() 経由
         $response1 = $this->postJson('/api/v1/_test-exceptions/422-validate', []);
         $this->assertCommonErrorShape($response1, 422);
-        $response1->assertJsonPath('message', 'Validation failed')
+        $response1->assertJsonPath('message', 'The email field is required.')
             ->assertJsonPath('errors.email', ['The email field is required.']);
 
         // 2. FormRequest 経由
         $response2 = $this->postJson('/api/v1/_test-exceptions/422-form-request', []);
         $this->assertCommonErrorShape($response2, 422);
-        $response2->assertJsonPath('message', 'Validation failed')
+        $response2->assertJsonPath('message', 'The email field is required.')
             ->assertJsonPath('errors.email', ['The email field is required.']);
     }
 
@@ -85,9 +85,29 @@ class ApiExceptionResponseShapeTest extends TestCase
         $response = $this->getJson('/api/v1/_test-exceptions/422-string-error');
 
         $response->assertStatus(422)
-            ->assertJsonPath('message', 'Validation failed')
+            ->assertJsonPath('message', 'Single string error message (and 2 more errors)')
             ->assertJsonPath('errors.field1', ['Single string error message']) // 配列に正規化されていること
             ->assertJsonPath('errors.field2', ['Array message 1', 'Array message 2']);
+    }
+
+    public function test_custom_exception_messages_are_preserved_in_non_production(): void
+    {
+        $this->getJson('/api/v1/_test-exceptions/403')
+            ->assertStatus(403)
+            ->assertJsonPath('message', 'Forbidden.');
+    }
+
+    public function test_validation_and_authorization_messages_fall_back_to_standard_text_in_production(): void
+    {
+        $this->runInEnvironment('production', function (): void {
+            $this->getJson('/api/v1/_test-exceptions/422-string-error')
+                ->assertStatus(422)
+                ->assertJsonPath('message', 'Validation failed');
+
+            $this->getJson('/api/v1/_test-exceptions/403')
+                ->assertStatus(403)
+                ->assertJsonPath('message', 'Forbidden');
+        });
     }
 
     public function test_response_shape_is_same_for_401(): void
@@ -121,5 +141,17 @@ class ApiExceptionResponseShapeTest extends TestCase
             ])
             ->assertJsonPath('status', 'error')
             ->assertJsonPath('data', null);
+    }
+
+    private function runInEnvironment(string $environment, callable $callback): mixed
+    {
+        $originalEnvironment = $this->app['env'];
+        $this->app['env'] = $environment;
+
+        try {
+            return $callback();
+        } finally {
+            $this->app['env'] = $originalEnvironment;
+        }
     }
 }

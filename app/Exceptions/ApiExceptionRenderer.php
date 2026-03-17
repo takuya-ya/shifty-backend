@@ -41,7 +41,13 @@ final class ApiExceptionRenderer
             $message = 'Unauthenticated.';
         } elseif ($throwable instanceof AuthorizationException) {
             $status = 403;
-            $message = 'This action is unauthorized.';
+            $standardText = Response::$statusTexts[$status] ?? 'Error';
+            if (app()->isProduction()) {
+                $message = $standardText;
+            } else {
+                $customMessage = $throwable->getMessage();
+                $message = $customMessage !== '' ? $customMessage : $standardText;
+            }
         } elseif ($throwable instanceof HttpExceptionInterface) {
             $status = $throwable->getStatusCode();
             $standardText = Response::$statusTexts[$status] ?? 'Error';
