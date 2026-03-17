@@ -38,9 +38,15 @@ final class ApiExceptionRenderer
             $message = $throwable->getMessage() !== '' ? $throwable->getMessage() : 'This action is unauthorized.';
         } elseif ($throwable instanceof HttpExceptionInterface) {
             $status = $throwable->getStatusCode();
-            $message = $throwable->getMessage() !== ''
-                ? $throwable->getMessage()
-                : ($status === 404 ? 'Not found' : (Response::$statusTexts[$status] ?? 'Error'));
+            if ($throwable->getMessage() !== '') {
+                $message = $throwable->getMessage();
+            } elseif ($status === 404) {
+                $message = 'Not found';
+            } elseif (isset(Response::$statusTexts[$status])) {
+                $message = Response::$statusTexts[$status];
+            } else {
+                $message = 'Error';
+            }
         }
 
         return response()->json(
