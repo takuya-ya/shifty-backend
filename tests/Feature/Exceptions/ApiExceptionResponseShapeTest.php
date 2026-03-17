@@ -76,8 +76,7 @@ class ApiExceptionResponseShapeTest extends TestCase
     }
 
     /**
-     * @see ApiExceptionRenderer::normalizeValidationErrors
-     */
+     * @see \App\Exceptions\ApiExceptionRenderer::normalizeValidationErrors */
     public function test_validation_errors_are_always_normalized_to_arrays(): void
     {
         // 手動で文字列のメッセージを持つ ValidationException を投げる

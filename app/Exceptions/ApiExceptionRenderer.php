@@ -28,7 +28,7 @@ final class ApiExceptionRenderer
 
         if ($throwable instanceof ValidationException) {
             $status = 422;
-            // 本番環境では常にデフォルトメッセージ、非本番ではカスタムメッセージ優先
+            // 本番環境では常に標準化されたメッセージを使用し、非本番ではカスタムメッセージを優先する
             if (app()->isProduction()) {
                 $message = 'Validation failed';
             } else {
