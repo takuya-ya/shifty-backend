@@ -28,25 +28,21 @@ final class ApiExceptionRenderer
 
         if ($throwable instanceof ValidationException) {
             $status = 422;
-            $message = $throwable->getMessage() !== '' ? $throwable->getMessage() : 'The given data was invalid.';
+            $message = 'Validation failed';
             $errors = $this->normalizeValidationErrors($throwable->errors());
         } elseif ($throwable instanceof AuthenticationException) {
             $status = 401;
             $message = 'Unauthenticated.';
         } elseif ($throwable instanceof AuthorizationException) {
             $status = 403;
-            $message = $throwable->getMessage() !== '' ? $throwable->getMessage() : 'This action is unauthorized.';
+            $message = 'This action is unauthorized.';
         } elseif ($throwable instanceof HttpExceptionInterface) {
             $status = $throwable->getStatusCode();
-            if ($throwable->getMessage() !== '') {
-                $message = $throwable->getMessage();
-            } elseif ($status === 404) {
-                $message = 'Not found';
-            } elseif (isset(Response::$statusTexts[$status])) {
-                $message = Response::$statusTexts[$status];
-            } else {
-                $message = 'Error';
-            }
+            $message = match ($status) {
+                403 => 'This action is unauthorized.',
+                404 => 'Not found',
+                default => isset(Response::$statusTexts[$status]) ? Response::$statusTexts[$status] : 'Error',
+            };
         }
 
         return $this->errorResponse(
