@@ -38,11 +38,10 @@ final class ApiExceptionRenderer
             $message = 'This action is unauthorized.';
         } elseif ($throwable instanceof HttpExceptionInterface) {
             $status = $throwable->getStatusCode();
-            $message = match ($status) {
-                403 => 'This action is unauthorized.',
-                404 => 'Not found',
-                default => isset(Response::$statusTexts[$status]) ? Response::$statusTexts[$status] : 'Error',
-            };
+            $standardText = Response::$statusTexts[$status] ?? 'Error';
+            $message = app()->isProduction()
+                ? $standardText
+                : ($throwable->getMessage() !== '' ? $throwable->getMessage() : $standardText);
         }
 
         return $this->errorResponse(
