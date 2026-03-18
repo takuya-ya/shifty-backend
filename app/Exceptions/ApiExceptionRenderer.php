@@ -28,27 +28,46 @@ final class ApiExceptionRenderer
 
         if ($throwable instanceof ValidationException) {
             $status = 422;
-            $message = $throwable->getMessage() !== '' ? $throwable->getMessage() : 'The given data was invalid.';
-            $errors = $throwable->errors();
+            // 本番環境では常に標準化されたメッセージを使用し、非本番ではカスタムメッセージを優先する
+            if (app()->isProduction()) {
+                $message = 'Validation failed';
+            } else {
+                $customMessage = $throwable->getMessage();
+                $message = $customMessage !== '' ? $customMessage : 'Validation failed';
+            }
+            $errors = $this->normalizeValidationErrors($throwable->errors());
         } elseif ($throwable instanceof AuthenticationException) {
             $status = 401;
             $message = 'Unauthenticated.';
         } elseif ($throwable instanceof AuthorizationException) {
             $status = 403;
-            $message = $throwable->getMessage() !== '' ? $throwable->getMessage() : 'This action is unauthorized.';
+            $standardText = Response::$statusTexts[$status] ?? 'Error';
+            if (app()->isProduction()) {
+                $message = $standardText;
+            } else {
+                $customMessage = $throwable->getMessage();
+                $message = $customMessage !== '' ? $customMessage : $standardText;
+            }
         } elseif ($throwable instanceof HttpExceptionInterface) {
             $status = $throwable->getStatusCode();
-            if ($throwable->getMessage() !== '') {
-                $message = $throwable->getMessage();
-            } elseif ($status === 404) {
-                $message = 'Not found';
-            } elseif (isset(Response::$statusTexts[$status])) {
-                $message = Response::$statusTexts[$status];
-            } else {
-                $message = 'Error';
-            }
+            $standardText = Response::$statusTexts[$status] ?? 'Error';
+            $message = app()->isProduction()
+                ? $standardText
+                : ($throwable->getMessage() !== '' ? $throwable->getMessage() : $standardText);
         }
 
+        return $this->errorResponse(
+            status: $status,
+            message: $message,
+            errors: $errors,
+        );
+    }
+
+    /**
+     * @param array<string, string|array<int, string>>|null $errors
+     */
+    private function errorResponse(int $status, string $message, ?array $errors = null): Response
+    {
         return response()->json(
             new ApiResponsePayload(
                 status: ApiResponseStatus::Error,
@@ -58,6 +77,26 @@ final class ApiExceptionRenderer
             ),
             $status,
         );
+    }
+
+    /**
+     * @param array<string, mixed> $errors
+     * @return array<string, array<int, string>>
+     */
+    private function normalizeValidationErrors(array $errors): array
+    {
+        $normalized = [];
+
+        foreach ($errors as $field => $messages) {
+            if (is_array($messages)) {
+                $normalized[(string) $field] = array_map(static fn(mixed $message): string => (string) $message, $messages);
+                continue;
+            }
+
+            $normalized[(string) $field] = [(string) $messages];
+        }
+
+        return $normalized;
     }
 
     private function shouldRenderAsJson(Request $request): bool
