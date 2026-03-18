@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Exceptions;
 
-use App\Http\Requests\Test\TestFormRequest;
+use Tests\Support\TestFormRequest;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
