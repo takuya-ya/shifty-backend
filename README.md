@@ -57,3 +57,13 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Environment Variables
+
+| Variable | Description | Example |
+| :--- | :--- | :--- |
+| `FRONTEND_URL` | フロントエンドのベースURL。**末尾のスラッシュは含めないでください。** | `http://localhost:5173` |
+| `APP_URL` | バックエンドのベースURL。 | `http://localhost:8080` |
+| `SANCTUM_STATEFUL_DOMAINS` | クッキー認証を許可するドメイン（ポート含む）。 | `localhost:5173,localhost:8080` |
+| `SESSION_DOMAIN` | セッションクッキーを有効にするドメイン。 | `localhost` |
+
