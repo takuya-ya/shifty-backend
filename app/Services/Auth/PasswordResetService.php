@@ -7,7 +7,6 @@ namespace App\Services\Auth;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\Events\PasswordReset;
 
 class PasswordResetService
 {
@@ -48,8 +47,6 @@ class PasswordResetService
             $data,
             function ($user) use ($data) {
                 $this->userRepository->updatePassword($user, $data['password']);
-
-                event(new PasswordReset($user));
             }
         );
 
