@@ -7,7 +7,7 @@ use App\Services\Auth\EmailVerificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class ResendVerificationEmailController extends Controller
+class EmailVerificationResendController extends Controller
 {
     public function __construct(
         private readonly EmailVerificationService $emailVerificationService
