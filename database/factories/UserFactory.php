@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
+use App\Models\Role;
+use App\Models\StaffProfile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -11,14 +15,9 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
     protected static ?string $password;
 
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
@@ -31,13 +30,43 @@ class UserFactory extends Factory
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $_) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    /**
+     * StaffProfile を一緒に生成する state。
+     *
+     * @param  array<string, mixed>  $attributes
+     */
+    public function withStaffProfile(array $attributes = []): static
+    {
+        return $this->afterCreating(function (\App\Models\User $user) use ($attributes) {
+            StaffProfile::factory()->create(array_merge(
+                ['user_id' => $user->id],
+                $attributes,
+            ));
+        });
+    }
+
+    /** Store Admin ロールを付与する state。 */
+    public function admin(): static
+    {
+        return $this->afterCreating(function (\App\Models\User $user) {
+            $role = Role::firstOrCreate(['name' => Role::ROLE_STORE_ADMIN]);
+            $user->roles()->syncWithoutDetaching([$role->id]);
+        });
+    }
+
+    /** Staff ロールを付与する state。 */
+    public function staff(): static
+    {
+        return $this->afterCreating(function (\App\Models\User $user) {
+            $role = Role::firstOrCreate(['name' => Role::ROLE_STAFF]);
+            $user->roles()->syncWithoutDetaching([$role->id]);
+        });
     }
 }
