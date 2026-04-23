@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,7 @@ class StaffProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => null,
+            'user_id' => User::factory(),
             'name' => fake('ja_JP')->name(),
             'date_of_birth' => fake()->dateTimeBetween('-40 years', '-18 years')->format('Y-m-d'),
             'is_student' => fake()->boolean(30),
