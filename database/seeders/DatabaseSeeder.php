@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             PositionSeeder::class,
         ]);
 
-        // 管理者ユーザー（重複実行に備えて firstOrCreate）
+        // 管理者ユーザー（exists チェックで重複実行に対応）
         if (! \App\Models\User::where('email', 'admin@example.com')->exists()) {
             User::factory()
                 ->admin()
