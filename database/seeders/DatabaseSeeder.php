@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     public function run(): void
     {
         $this->call([
@@ -24,10 +27,15 @@ class DatabaseSeeder extends Seeder
                 ->create(['email' => 'admin@example.com']);
         }
 
-        // スタッフユーザー × 5
-        User::factory(5)
-            ->staff()
-            ->withStaffProfile()
-            ->create();
+        // スタッフユーザー × 5（重複実行に備えて exists チェック）
+        foreach (range(1, 5) as $i) {
+            $email = "staff{$i}@example.com";
+            if (! User::where('email', $email)->exists()) {
+                User::factory()
+                    ->staff()
+                    ->withStaffProfile(['name' => "スタッフ{$i}"])
+                    ->create(['email' => $email]);
+            }
+        }
     }
 }
