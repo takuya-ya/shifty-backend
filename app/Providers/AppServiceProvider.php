@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
             $pathWithQuery = ($parsed['path'] ?? '') . '?' . ($parsed['query'] ?? '');
 
             $frontendUrl = config('app.frontend_url');
-            return "{$frontendUrl}/?verify_path=" . urlencode($pathWithQuery);
+            return "{$frontendUrl}/verify-email?verify_path=" . urlencode($pathWithQuery);
         });
 
         ResetPassword::createUrlUsing(function (object $notifiable, string $token) {
