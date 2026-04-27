@@ -38,12 +38,13 @@ class AppServiceProvider extends ServiceProvider
             $parsed = parse_url($signedUrl);
             $pathWithQuery = ($parsed['path'] ?? '') . '?' . ($parsed['query'] ?? '');
 
-            $frontendUrl = config('app.frontend_url');
+            $frontendUrl = rtrim(config('app.frontend_url'), '/');
             return "{$frontendUrl}/verify-email?verify_path=" . urlencode($pathWithQuery);
         });
 
         ResetPassword::createUrlUsing(function (object $notifiable, string $token) {
-            return config('app.frontend_url') . "/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
+            $frontendUrl = rtrim(config('app.frontend_url'), '/');
+            return "{$frontendUrl}/password-reset/{$token}?email={$notifiable->getEmailForPasswordReset()}";
         });
     }
 }
