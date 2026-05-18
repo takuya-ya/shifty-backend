@@ -11,9 +11,10 @@ class ShiftRepository
 {
     public function findByPeriod(string $from, string $to): Collection
     {
-        return Shift::whereBetween('start_at', [
-            $from . ' 00:00:00',
-            $to . ' 23:59:59',
-        ])->get();
+        return Shift::with(['staffProfile', 'position'])
+            ->whereBetween('start_at', [
+                $from . ' 00:00:00',
+                $to . ' 23:59:59',
+            ])->get();
     }
 }
