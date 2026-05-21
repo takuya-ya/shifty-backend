@@ -20,7 +20,7 @@ class ShiftController extends Controller
 
     public function index(ShiftIndexRequest $request): JsonResponse
     {
-        $shifts = $this->shiftQueryService->getShiftsByPeriod($request->from, $request->to);
+        $shifts = $this->shiftQueryService->getShiftsByPeriod($request->validated('from'), $request->validated('to'));
 
         return $this->success(data: ShiftResource::collection($shifts));
     }
