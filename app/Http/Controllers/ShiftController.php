@@ -6,14 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Shift\ShiftIndexRequest;
 use App\Http\Resources\ShiftResource;
-use App\Http\Responses\ApiResponseTrait;
 use App\Services\Shift\ShiftQueryService;
 use Illuminate\Http\JsonResponse;
 
 class ShiftController extends Controller
 {
-    use ApiResponseTrait;
-
     public function __construct(
         private readonly ShiftQueryService $shiftQueryService,
     ) {}
