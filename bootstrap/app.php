@@ -18,16 +18,12 @@ return Application::configure(basePath: dirname(__DIR__))
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
 
-        $middleware->alias([
-            'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
-        ]);
-
         $middleware->statefulApi();
         $middleware->appendToGroup('api', [
             \Illuminate\Session\Middleware\StartSession::class,
         ]);
         $middleware->alias([
-            'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+            'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
             'local.only' => \App\Http\Middleware\LocalOnly::class,
         ]);
     })

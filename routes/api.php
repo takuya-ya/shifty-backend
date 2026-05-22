@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\EmailVerificationResendController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\Test\ApiResponseSandboxController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -51,5 +52,11 @@ Route::prefix('v1')->group(function () {
         Route::post('/email/verification-notification', [EmailVerificationResendController::class, 'store'])
             ->middleware('throttle:6,1')
             ->name('verification.send');
+
+        // 業務ルート（メール認証済みユーザーのみ）
+        Route::middleware('verified')->group(function () {
+            Route::get('/shifts', [ShiftController::class, 'index'])
+                ->name('api.v1.shifts.index');
+        });
     });
 });
