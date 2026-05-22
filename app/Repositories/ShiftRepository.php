@@ -18,9 +18,8 @@ class ShiftRepository
      */
     public function findByPeriod(string $from, string $to): Collection
     {
-        // 日付文字列をCarbonに変換し、それぞれの開始時刻と終了時刻を明示的に生成する
-        $start = Carbon::parse($from)->startOfDay(); // 例: 2026-05-19 00:00:00
-        $end = Carbon::parse($to)->endOfDay();       // 例: 2026-05-20 23:59:59
+        $start = Carbon::parse($from)->startOfDay();
+        $end = Carbon::parse($to)->endOfDay();
 
         return Shift::with(['staffProfile'])
             ->whereBetween('start_at', [$start, $end])
