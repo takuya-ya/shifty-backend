@@ -40,6 +40,15 @@ class ShiftIndexTest extends TestCase
             ->assertUnprocessable();
     }
 
+    public function test_missing_to_param_returns_422(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->getJson(self::ENDPOINT . '?from=2026-05-01')
+            ->assertUnprocessable();
+    }
+
     public function test_invalid_date_format_returns_422(): void
     {
         $user = User::factory()->create();
