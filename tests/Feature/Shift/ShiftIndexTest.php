@@ -196,7 +196,7 @@ class ShiftIndexTest extends TestCase
 
     public function test_each_shift_returns_its_own_staff_profile(): void
     {
-        $user          = User::factory()->create();
+        $user = User::factory()->create();
         $staffProfile1 = StaffProfile::factory()->create();
         $staffProfile2 = StaffProfile::factory()->create();
 
