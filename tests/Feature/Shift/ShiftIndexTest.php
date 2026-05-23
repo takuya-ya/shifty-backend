@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Shift;
 
+use App\Models\Position;
 use App\Models\Shift;
 use App\Models\StaffProfile;
 use App\Models\User;
@@ -97,6 +98,29 @@ class ShiftIndexTest extends TestCase
             ->assertJsonCount(1, 'data')
             ->assertJsonPath('data.0.staff_id', $staffProfile->id)
             ->assertJsonPath('data.0.staff_profile.name', $staffProfile->name);
+    }
+
+    public function test_shift_fields_are_returned_with_correct_values(): void
+    {
+        $user = User::factory()->create();
+        $staffProfile = StaffProfile::factory()->create();
+        $position = Position::create(['name' => 'テストポジション']);
+
+        Shift::factory()->create([
+            'staff_id'    => $staffProfile->id,
+            'start_at'    => '2026-05-05 09:00:00',
+            'end_at'      => '2026-05-05 17:00:00',
+            'shift_state' => 'confirmed',
+            'position_id' => $position->id,
+            'memo'        => 'テスト用メモ',
+        ]);
+
+        $this->actingAs($user)
+            ->getJson(self::ENDPOINT . '?from=2026-05-01&to=2026-05-15')
+            ->assertOk()
+            ->assertJsonPath('data.0.shift_state', 'confirmed')
+            ->assertJsonPath('data.0.position_id', $position->id)
+            ->assertJsonPath('data.0.memo', 'テスト用メモ');
     }
 
     public function test_start_at_and_end_at_are_returned_in_iso8601_format(): void
