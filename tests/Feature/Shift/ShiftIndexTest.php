@@ -99,6 +99,24 @@ class ShiftIndexTest extends TestCase
             ->assertJsonPath('data.0.staff_profile.name', $staffProfile->name);
     }
 
+    public function test_start_at_and_end_at_are_returned_in_iso8601_format(): void
+    {
+        $user = User::factory()->create();
+        $staffProfile = StaffProfile::factory()->create();
+
+        Shift::factory()->create([
+            'staff_id' => $staffProfile->id,
+            'start_at' => '2026-05-05 09:00:00',
+            'end_at'   => '2026-05-05 17:00:00',
+        ]);
+
+        $this->actingAs($user)
+            ->getJson(self::ENDPOINT . '?from=2026-05-01&to=2026-05-15')
+            ->assertOk()
+            ->assertJsonPath('data.0.start_at', '2026-05-05T09:00:00+00:00')
+            ->assertJsonPath('data.0.end_at', '2026-05-05T17:00:00+00:00');
+    }
+
     public function test_shifts_outside_period_are_not_returned(): void
     {
         $user = User::factory()->create();
