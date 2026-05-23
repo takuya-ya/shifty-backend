@@ -104,7 +104,7 @@ class ShiftIndexTest extends TestCase
     {
         $user = User::factory()->create();
         $staffProfile = StaffProfile::factory()->create();
-        $position = Position::create(['name' => 'テストポジション']);
+        $position = Position::factory()->create();
 
         Shift::factory()->create([
             'staff_id'    => $staffProfile->id,
@@ -165,7 +165,7 @@ class ShiftIndexTest extends TestCase
 
         Shift::factory()->createMany([
             ['staff_id' => $staffProfile->id, 'start_at' => '2026-05-01 00:00:00', 'end_at' => '2026-05-01 08:00:00'],
-            ['staff_id' => $staffProfile->id, 'start_at' => '2026-05-15 23:59:59', 'end_at' => '2026-05-15 23:59:59'],
+            ['staff_id' => $staffProfile->id, 'start_at' => '2026-05-15 23:59:59', 'end_at' => '2026-05-16 07:00:00'],
         ]);
 
         $this->actingAs($user)
