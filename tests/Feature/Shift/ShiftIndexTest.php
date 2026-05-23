@@ -193,7 +193,7 @@ class ShiftIndexTest extends TestCase
 
     public function test_each_shift_returns_its_own_staff_profile(): void
     {
-        $user         = User::factory()->create();
+        $user          = User::factory()->create();
         $staffProfile1 = StaffProfile::factory()->create();
         $staffProfile2 = StaffProfile::factory()->create();
 
@@ -212,7 +212,9 @@ class ShiftIndexTest extends TestCase
             ->getJson(self::ENDPOINT . '?from=2026-05-01&to=2026-05-15')
             ->assertOk()
             ->assertJsonCount(2, 'data')
-            ->assertJsonFragment(['staff_id' => $staffProfile1->id, 'name' => $staffProfile1->name])
-            ->assertJsonFragment(['staff_id' => $staffProfile2->id, 'name' => $staffProfile2->name]);
+            ->assertJsonPath('data.0.staff_id', $staffProfile1->id)
+            ->assertJsonPath('data.0.staff_profile.name', $staffProfile1->name)
+            ->assertJsonPath('data.1.staff_id', $staffProfile2->id)
+            ->assertJsonPath('data.1.staff_profile.name', $staffProfile2->name);
     }
 }
