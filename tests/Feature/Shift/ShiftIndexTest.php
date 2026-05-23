@@ -158,6 +158,22 @@ class ShiftIndexTest extends TestCase
             ->assertJsonCount(3, 'data');
     }
 
+    public function test_shifts_on_boundary_dates_are_included(): void
+    {
+        $user = User::factory()->create();
+        $staffProfile = StaffProfile::factory()->create();
+
+        Shift::factory()->createMany([
+            ['staff_id' => $staffProfile->id, 'start_at' => '2026-05-01 00:00:00', 'end_at' => '2026-05-01 08:00:00'],
+            ['staff_id' => $staffProfile->id, 'start_at' => '2026-05-15 23:59:59', 'end_at' => '2026-05-15 23:59:59'],
+        ]);
+
+        $this->actingAs($user)
+            ->getJson(self::ENDPOINT . '?from=2026-05-01&to=2026-05-15')
+            ->assertOk()
+            ->assertJsonCount(2, 'data');
+    }
+
     public function test_shifts_outside_period_are_not_returned(): void
     {
         $user = User::factory()->create();
