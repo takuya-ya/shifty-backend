@@ -23,6 +23,7 @@ class ShiftRepository
 
         return Shift::with(['staffProfile'])
             ->whereBetween('start_at', [$start, $end])
+            ->orderBy('start_at')
             ->get();
     }
 }
