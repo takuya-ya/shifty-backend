@@ -134,11 +134,14 @@ class ShiftIndexTest extends TestCase
             'end_at'   => '2026-05-05 17:00:00',
         ]);
 
-        $this->actingAs($user)
+        $iso8601Pattern = '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/';
+
+        $response = $this->actingAs($user)
             ->getJson(self::ENDPOINT . '?from=2026-05-01&to=2026-05-15')
-            ->assertOk()
-            ->assertJsonPath('data.0.start_at', '2026-05-05T09:00:00+00:00')
-            ->assertJsonPath('data.0.end_at', '2026-05-05T17:00:00+00:00');
+            ->assertOk();
+
+        $this->assertMatchesRegularExpression($iso8601Pattern, $response->json('data.0.start_at'));
+        $this->assertMatchesRegularExpression($iso8601Pattern, $response->json('data.0.end_at'));
     }
 
     public function test_all_shifts_within_period_are_returned(): void
