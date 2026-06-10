@@ -119,7 +119,7 @@ class ShiftIndexTest extends TestCase
             ->getJson(self::ENDPOINT . '?from=2026-05-01&to=2026-05-15')
             ->assertOk()
             ->assertJsonPath('data.0.shift_state', 'confirmed')
-            ->assertJsonPath('data.0.position_id', $position->id)
+            ->assertJsonPath('data.0.position.name', $position->name)
             ->assertJsonPath('data.0.memo', 'テスト用メモ');
     }
 
