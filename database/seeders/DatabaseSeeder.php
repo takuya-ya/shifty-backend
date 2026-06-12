@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             PositionSeeder::class,
+            ShiftSeeder::class,
         ]);
 
         // 管理者ユーザー（exists チェックで重複実行に対応）
