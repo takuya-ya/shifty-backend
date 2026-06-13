@@ -23,6 +23,8 @@ class ShiftSeeder extends Seeder
 
         $positions   = [$hall->id, $kitchen->id];
         $states      = ['draft', 'confirmed'];
+        $startHours  = [8, 9, 10, 11, 12];
+        $durations   = [6, 7, 8];
         $baseDate    = now()->startOfMonth();
 
         foreach ($staffIds as $index => $staffId) {
@@ -31,14 +33,16 @@ class ShiftSeeder extends Seeder
                 $date        = $baseDate->copy()->addDays($day - 1);
                 $positionId  = $positions[$index % count($positions)];
                 $state       = $states[$day % count($states)];
+                $startHour   = $startHours[array_rand($startHours)];
+                $endHour     = $startHour + $durations[array_rand($durations)];
 
                 Shift::firstOrCreate(
                     [
                         'staff_id' => $staffId,
-                        'start_at' => $date->format('Y-m-d') . ' 09:00:00',
+                        'start_at' => $date->format('Y-m-d') . sprintf(' %02d:00:00', $startHour),
                     ],
                     [
-                        'end_at'      => $date->format('Y-m-d') . ' 17:00:00',
+                        'end_at'      => $date->format('Y-m-d') . sprintf(' %02d:00:00', $endHour),
                         'shift_state' => $state,
                         'position_id' => $positionId,
                         'memo'        => null,
