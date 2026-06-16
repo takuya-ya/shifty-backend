@@ -27,12 +27,12 @@ class ShiftSeeder extends Seeder
         $durations   = [6, 7, 8];
         $baseDate    = now()->startOfMonth();
 
-        foreach ($staffIds as $index => $staffId) {
+        foreach ($staffIds as $staffId) {
             // 各スタッフに当月1〜7日の日程でシフトを生成
             foreach (range(1, 7) as $day) {
                 $date        = $baseDate->copy()->addDays($day - 1);
-                $positionId  = $positions[$index % count($positions)];
-                $state       = $states[$day % count($states)];
+                $positionId  = $positions[array_rand($positions)];
+                $state       = $states[array_rand($states)];
                 $startHour   = $startHours[array_rand($startHours)];
                 $endHour     = $startHour + $durations[array_rand($durations)];
 

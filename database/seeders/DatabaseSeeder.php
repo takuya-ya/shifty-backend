@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             PositionSeeder::class,
-            ShiftSeeder::class,
         ]);
 
         // 管理者ユーザー（exists チェックで重複実行に対応）
@@ -38,5 +37,9 @@ class DatabaseSeeder extends Seeder
                     ->create(['email' => $email]);
             }
         }
+
+        $this->call([
+            ShiftSeeder::class,
+        ]);
     }
 }
