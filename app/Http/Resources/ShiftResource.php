@@ -17,7 +17,9 @@ class ShiftResource extends JsonResource
             'start_at'    => $this->start_at->toIso8601String(),
             'end_at'      => $this->end_at->toIso8601String(),
             'shift_state' => $this->shift_state,
-            'position_id' => $this->position_id,
+            'position'    => $this->whenLoaded('position', fn () => [
+                'name' => $this->position->name,
+            ]),
             'memo'        => $this->memo,
             'staff_profile' => $this->whenLoaded('staffProfile', fn () => [
                 'name' => $this->staffProfile->name,

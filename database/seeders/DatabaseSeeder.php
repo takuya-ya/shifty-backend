@@ -37,5 +37,9 @@ class DatabaseSeeder extends Seeder
                     ->create(['email' => $email]);
             }
         }
+
+        $this->call([
+            ShiftSeeder::class,
+        ]);
     }
 }

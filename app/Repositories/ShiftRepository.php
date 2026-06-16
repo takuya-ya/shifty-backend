@@ -21,7 +21,7 @@ class ShiftRepository
         $start = Carbon::parse($from)->startOfDay();
         $end = Carbon::parse($to)->endOfDay();
 
-        return Shift::with(['staffProfile'])
+        return Shift::with(['staffProfile', 'position'])
             ->whereBetween('start_at', [$start, $end])
             ->orderBy('start_at')
             ->get();
