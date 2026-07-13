@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Shift\ShiftIndexRequest;
+use App\Http\Requests\Shift\IndexShiftRequest;
 use App\Http\Resources\ShiftResource;
 use App\Services\Shift\ShiftQueryService;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +15,7 @@ class ShiftController extends Controller
         private readonly ShiftQueryService $shiftQueryService,
     ) {}
 
-    public function index(ShiftIndexRequest $request): JsonResponse
+    public function index(IndexShiftRequest $request): JsonResponse
     {
         $shifts = $this->shiftQueryService->getShiftsByPeriod($request->validated('from'), $request->validated('to'));
 
