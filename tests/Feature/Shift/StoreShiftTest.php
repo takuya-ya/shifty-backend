@@ -12,7 +12,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ShiftStoreTest extends TestCase
+class StoreShiftTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -133,6 +133,8 @@ class ShiftStoreTest extends TestCase
     {
         // DB の UNIQUE (staff_id, start_at) はソフトデリート行も対象のため、
         // バリデーションを素通りさせると DB 例外で 500 になる。その防衛境界を検証する
+        // TODO: タスク19.3.5でUNIQUE制約をソフトデリート対応の生成カラムに変更した場合、
+        //       このテストの期待値は 422 → 201（再作成許可）に反転する想定
         $user = User::factory()->create();
         $staffProfile = StaffProfile::factory()->create();
 
@@ -165,6 +167,66 @@ class ShiftStoreTest extends TestCase
             ->assertJsonValidationErrors(['staff_id']);
 
         $this->assertDatabaseCount('shifts', 0);
+    }
+
+    public function test_shift_can_be_created_with_break_times(): void
+    {
+        $user = User::factory()->create();
+        $payload = $this->validPayload([
+            'break_start_at' => '2026-08-01 12:00:00',
+            'break_end_at' => '2026-08-01 13:00:00',
+        ]);
+
+        $this->actingAs($user)
+            ->postJson(self::ENDPOINT, $payload)
+            ->assertCreated();
+
+        $this->assertDatabaseHas('shifts', [
+            'staff_id' => $payload['staff_id'],
+            'break_start_at' => '2026-08-01 12:00:00',
+            'break_end_at' => '2026-08-01 13:00:00',
+        ]);
+    }
+
+    public function test_break_start_at_without_break_end_at_returns_422(): void
+    {
+        $user = User::factory()->create();
+        $payload = $this->validPayload([
+            'break_start_at' => '2026-08-01 12:00:00',
+        ]);
+
+        $this->actingAs($user)
+            ->postJson(self::ENDPOINT, $payload)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['break_end_at']);
+    }
+
+    public function test_break_start_at_before_start_at_returns_422(): void
+    {
+        $user = User::factory()->create();
+        $payload = $this->validPayload([
+            'break_start_at' => '2026-08-01 08:00:00',
+            'break_end_at' => '2026-08-01 09:30:00',
+        ]);
+
+        $this->actingAs($user)
+            ->postJson(self::ENDPOINT, $payload)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['break_start_at']);
+    }
+
+    public function test_break_end_at_after_end_at_returns_422(): void
+    {
+        $user = User::factory()->create();
+        $payload = $this->validPayload([
+            'break_start_at' => '2026-08-01 16:00:00',
+            'break_end_at' => '2026-08-01 18:00:00',
+        ]);
+
+        $this->actingAs($user)
+            ->postJson(self::ENDPOINT, $payload)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['break_end_at']);
     }
 
     public function test_memo_exceeding_max_length_returns_422(): void

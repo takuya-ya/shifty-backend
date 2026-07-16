@@ -37,6 +37,8 @@ class StoreShiftRequest extends FormRequest
             ],
             'start_at' => ['required', 'date_format:Y-m-d H:i:s'],
             'end_at' => ['required', 'date_format:Y-m-d H:i:s', 'after:start_at'],
+            'break_start_at' => ['nullable', 'date_format:Y-m-d H:i:s', 'required_with:break_end_at', 'after_or_equal:start_at', 'before:end_at'],
+            'break_end_at' => ['nullable', 'date_format:Y-m-d H:i:s', 'required_with:break_start_at', 'after:break_start_at', 'before_or_equal:end_at'],
             'position_id' => ['nullable', 'integer', 'exists:positions,id'],
             'memo' => ['nullable', 'string', 'max:'.self::MEMO_MAX_LENGTH],
         ];

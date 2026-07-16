@@ -11,7 +11,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ShiftIndexTest extends TestCase
+class IndexShiftTest extends TestCase
 {
     use RefreshDatabase;
 
