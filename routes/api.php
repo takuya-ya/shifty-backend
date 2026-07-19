@@ -57,6 +57,9 @@ Route::prefix('v1')->group(function () {
         Route::middleware('verified')->group(function () {
             Route::get('/shifts', [ShiftController::class, 'index'])
                 ->name('api.v1.shifts.index');
+
+            Route::post('/shifts', [ShiftController::class, 'store'])
+                ->name('api.v1.shifts.store');
         });
     });
 });
