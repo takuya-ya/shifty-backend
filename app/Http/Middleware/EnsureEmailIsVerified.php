@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Http\Responses\ApiResponsePayload;
-use App\Http\Responses\ApiResponseStatus;
 use Closure;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
@@ -19,7 +18,6 @@ class EnsureEmailIsVerified
     public function handle(Request $request, Closure $next): Response
     {
         $payload = new ApiResponsePayload(
-            status: ApiResponseStatus::Error,
             message: __('auth.email_unverified'),
         );
 
