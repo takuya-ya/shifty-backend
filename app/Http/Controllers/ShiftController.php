@@ -27,7 +27,7 @@ class ShiftController extends Controller
 
     public function store(StoreShiftRequest $request): JsonResponse
     {
-        $shift = $this->shiftCommandService->createShift($request->validated());
+        $shift = $this->shiftCommandService->create($request->validated());
 
         return $this->success(data: new ShiftResource($shift), status: 201);
     }
