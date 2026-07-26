@@ -6,7 +6,6 @@ namespace Tests\Feature\Http\Responses;
 
 use App\Http\Responses\ApiResponsePayload;
 use App\Http\Responses\ApiResponseTrait;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
@@ -20,7 +19,7 @@ class ApiResponseTraitTest extends TestCase
     /**
      * success() メソッドが正しい構造の JsonResponse を返すこと
      */
-    #[Test]
+
     public function test_success_returns_json_response_with_success_status(): void
     {
         $controller = new class {
@@ -45,7 +44,7 @@ class ApiResponseTraitTest extends TestCase
     /**
      * success() メソッドがメッセージ付きレスポンスを返すこと
      */
-    #[Test]
+
     public function test_success_includes_message_when_provided(): void
     {
         $controller = new class {
@@ -72,7 +71,7 @@ class ApiResponseTraitTest extends TestCase
     /**
      * error() メソッドが正しい構造の JsonResponse を返すこと（errors なし）
      */
-    #[Test]
+
     public function test_error_returns_json_response_with_error_status(): void
     {
         $controller = new class {
@@ -97,7 +96,7 @@ class ApiResponseTraitTest extends TestCase
     /**
      * error() メソッドがフィールド別エラー詳細を含むこと（422 Unprocessable Entity）
      */
-    #[Test]
+
     public function test_error_includes_validation_errors(): void
     {
         $controller = new class {
@@ -131,7 +130,7 @@ class ApiResponseTraitTest extends TestCase
     /**
      * ApiResponsePayload が Arrayable インターフェースを実装していること
      */
-    #[Test]
+
     public function test_api_response_payload_is_arrayable(): void
     {
         $payload = new ApiResponsePayload(
