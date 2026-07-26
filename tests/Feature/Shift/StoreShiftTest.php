@@ -18,15 +18,21 @@ class StoreShiftTest extends TestCase
 
     private const ENDPOINT = '/api/v1/shifts';
 
+    private StaffProfile $staffProfile;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->staffProfile = StaffProfile::factory()->create();
+    }
+
     /**
      * @return array<string, mixed>
      */
     private function validPayload(array $overrides = []): array
     {
-        $staffProfile = StaffProfile::factory()->create();
-
         return array_merge([
-            'staff_id' => $staffProfile->id,
+            'staff_id' => $this->staffProfile->id,
             'start_at' => '2026-08-01 09:00:00',
             'end_at' => '2026-08-01 17:00:00',
         ], $overrides);
