@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Exceptions;
 
 use App\Http\Responses\ApiResponsePayload;
-use App\Http\Responses\ApiResponseStatus;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
@@ -70,8 +69,6 @@ final class ApiExceptionRenderer
     {
         return response()->json(
             new ApiResponsePayload(
-                status: ApiResponseStatus::Error,
-                data: null,
                 message: $message,
                 errors: $errors,
             ),

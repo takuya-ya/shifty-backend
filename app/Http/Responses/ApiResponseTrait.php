@@ -16,7 +16,6 @@ use Illuminate\Http\JsonResponse;
  * レスポンス生成ロジックを検証可能にします。
  *
  * @see ApiResponsePayload レスポンス構造の型定義
- * @see ApiResponseStatus ステータス値の定義
  */
 trait ApiResponseTrait
 {
@@ -33,7 +32,6 @@ trait ApiResponseTrait
         int $status = 200,
     ): JsonResponse {
         $payload = new ApiResponsePayload(
-            status: ApiResponseStatus::Success,
             data: $data,
             message: $message,
         );
@@ -56,7 +54,6 @@ trait ApiResponseTrait
         int $status = 400,
     ): JsonResponse {
         $payload = new ApiResponsePayload(
-            status: ApiResponseStatus::Error,
             message: $message,
             errors: $errors,
         );

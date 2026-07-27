@@ -12,7 +12,6 @@ use JsonSerializable;
  *
  * @phpstan-type ApiResponseErrors array<string, string|array<int, string>>|null
  * @phpstan-type ApiResponseShape array{
- *     status: 'success'|'error',
  *     data: mixed,
  *     message: string|null,
  *     errors: ApiResponseErrors
@@ -24,7 +23,6 @@ final readonly class ApiResponsePayload implements Arrayable, JsonSerializable
      * @param array<string, string|array<int, string>>|null $errors
      */
     public function __construct(
-        public ApiResponseStatus $status,
         public mixed $data = null,
         public ?string $message = null,
         public ?array $errors = null,
@@ -32,7 +30,6 @@ final readonly class ApiResponsePayload implements Arrayable, JsonSerializable
 
     /**
      * @return array{
-     *     status: 'success'|'error',
      *     data: mixed,
      *     message: string|null,
      *     errors: array<string, string|array<int, string>>|null
@@ -41,7 +38,6 @@ final readonly class ApiResponsePayload implements Arrayable, JsonSerializable
     public function toArray(): array
     {
         return [
-            'status' => $this->status->value,
             'data' => $this->data,
             'message' => $this->message,
             'errors' => $this->errors,
@@ -50,7 +46,6 @@ final readonly class ApiResponsePayload implements Arrayable, JsonSerializable
 
     /**
      * @return array{
-     *     status: 'success'|'error',
      *     data: mixed,
      *     message: string|null,
      *     errors: array<string, string|array<int, string>>|null

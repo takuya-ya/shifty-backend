@@ -6,7 +6,7 @@ namespace App\Http\Requests\Shift;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ShiftIndexRequest extends FormRequest
+class IndexShiftRequest extends FormRequest
 {
     public function authorize(): bool
     {
