@@ -248,6 +248,18 @@ class StoreShiftTest extends TestCase
             ->assertJsonValidationErrors(['memo']);
     }
 
+    public function test_unverified_email_returns_403(): void
+    {
+        $user = User::factory()->unverified()->create();
+        $payload = $this->validPayload();
+
+        $this->actingAs($user)
+            ->postJson(self::ENDPOINT, $payload)
+            ->assertForbidden();
+
+        $this->assertDatabaseCount('shifts', 0);
+    }
+
     public function test_unauthenticated_request_returns_401(): void
     {
         $payload = $this->validPayload();
