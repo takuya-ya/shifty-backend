@@ -14,11 +14,6 @@ class StoreShiftRequest extends FormRequest
      */
     public const MEMO_MAX_LENGTH = 1000;
 
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     /**
      * @return array<string, array<int, mixed>>
      */
