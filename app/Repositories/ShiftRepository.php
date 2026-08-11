@@ -19,6 +19,16 @@ class ShiftRepository
     }
 
     /**
+     * @param  array<string, mixed>  $data
+     */
+    public function update(Shift $shift, array $data): Shift
+    {
+        $shift->update($data);
+
+        return $shift;
+    }
+
+    /**
      * 指定された日付期間（終日含む）のシフトを取得する
      *
      * @param  string  $from  引数は 'Y-m-d' 形式の日付

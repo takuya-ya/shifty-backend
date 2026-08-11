@@ -23,4 +23,14 @@ class ShiftCommandService
 
         return $this->shiftRepository->create($data);
     }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function updateShift(Shift $shift, array $data): Shift
+    {
+        $data['version'] = $shift->version + 1;
+
+        return $this->shiftRepository->update($shift, $data);
+    }
 }
