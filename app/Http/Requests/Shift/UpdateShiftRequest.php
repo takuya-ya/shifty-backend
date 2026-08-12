@@ -7,6 +7,7 @@ namespace App\Http\Requests\Shift;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+// authorize() 未定義 = 全許可（Laravel 11+ の FormRequest デフォルト動作）
 class UpdateShiftRequest extends FormRequest
 {
     public const MEMO_MAX_LENGTH = 1000;

@@ -6,7 +6,6 @@ namespace Tests\Feature\Shift;
 
 use App\Models\Position;
 use App\Models\Shift;
-use App\Models\StaffProfile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
