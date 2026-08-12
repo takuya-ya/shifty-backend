@@ -60,6 +60,9 @@ Route::prefix('v1')->group(function () {
 
             Route::post('/shifts', [ShiftController::class, 'store'])
                 ->name('api.v1.shifts.store');
+
+            Route::patch('/shifts/{shift}', [ShiftController::class, 'update'])
+                ->name('api.v1.shifts.update');
         });
     });
 });

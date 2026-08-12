@@ -6,7 +6,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Shift\IndexShiftRequest;
 use App\Http\Requests\Shift\StoreShiftRequest;
+use App\Http\Requests\Shift\UpdateShiftRequest;
 use App\Http\Resources\ShiftResource;
+use App\Models\Shift;
 use App\Services\Shift\ShiftCommandService;
 use App\Services\Shift\ShiftQueryService;
 use Illuminate\Http\JsonResponse;
@@ -30,5 +32,12 @@ class ShiftController extends Controller
         $shift = $this->shiftCommandService->create($request->validated());
 
         return $this->success(data: new ShiftResource($shift), status: 201);
+    }
+
+    public function update(UpdateShiftRequest $request, Shift $shift): JsonResponse
+    {
+        $updatedShift = $this->shiftCommandService->update($shift, $request->validated());
+
+        return $this->success(data: new ShiftResource($updatedShift));
     }
 }

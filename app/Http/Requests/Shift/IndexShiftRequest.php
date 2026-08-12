@@ -6,13 +6,9 @@ namespace App\Http\Requests\Shift;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+// authorize() 未定義 = 全許可（Laravel 11+ の FormRequest デフォルト動作）
 class IndexShiftRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         return [

@@ -7,17 +7,13 @@ namespace App\Http\Requests\Shift;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+// authorize() 未定義 = 全許可（Laravel 11+ の FormRequest デフォルト動作）
 class StoreShiftRequest extends FormRequest
 {
     /**
      * 印刷・画面表示を保護するためのメモの実用上限（DB の text 上限より厳しい業務上の制約）
      */
     public const MEMO_MAX_LENGTH = 1000;
-
-    public function authorize(): bool
-    {
-        return true;
-    }
 
     /**
      * @return array<string, array<int, mixed>>

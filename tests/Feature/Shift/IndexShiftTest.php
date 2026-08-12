@@ -76,8 +76,9 @@ class IndexShiftTest extends TestCase
             ->getJson(self::ENDPOINT . '?from=2026-05-01&to=2026-05-15')
             ->assertOk()
             ->assertJson([
-                'status' => 'success',
-                'data'   => [],
+                'data'    => [],
+                'message' => null,
+                'errors'  => null,
             ]);
     }
 
