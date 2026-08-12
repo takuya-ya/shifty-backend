@@ -36,7 +36,7 @@ class ShiftController extends Controller
 
     public function update(UpdateShiftRequest $request, Shift $shift): JsonResponse
     {
-        $updatedShift = $this->shiftCommandService->updateShift($shift, $request->validated());
+        $updatedShift = $this->shiftCommandService->update($shift, $request->validated());
 
         return $this->success(data: new ShiftResource($updatedShift));
     }

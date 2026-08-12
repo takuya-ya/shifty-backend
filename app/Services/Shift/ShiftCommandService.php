@@ -27,7 +27,7 @@ class ShiftCommandService
     /**
      * @param  array<string, mixed>  $data
      */
-    public function updateShift(Shift $shift, array $data): Shift
+    public function update(Shift $shift, array $data): Shift
     {
         $data['version'] = $shift->version + 1;
 
