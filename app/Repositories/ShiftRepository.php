@@ -23,6 +23,7 @@ class ShiftRepository
      */
     public function update(Shift $shift, array $data): Shift
     {
+        // DB トリガーや Observer で値が変わる場合は $shift->refresh() が必要
         $shift->update($data);
 
         return $shift;
