@@ -40,4 +40,11 @@ class ShiftController extends Controller
 
         return $this->success(data: new ShiftResource($updatedShift));
     }
+
+    public function destroy(Shift $shift): JsonResponse
+    {
+        $this->shiftCommandService->delete($shift);
+
+        return $this->success(status: 204);
+    }
 }
