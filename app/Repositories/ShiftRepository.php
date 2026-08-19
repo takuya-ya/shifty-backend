@@ -15,6 +15,7 @@ class ShiftRepository
      */
     public function create(array $data): Shift
     {
+        // インスタンス未作成のため静的メソッドで生成・保存を一括実行
         return Shift::create($data);
     }
 
@@ -27,6 +28,11 @@ class ShiftRepository
         $shift->update($data);
 
         return $shift;
+    }
+
+    public function delete(Shift $shift): void
+    {
+        $shift->delete();
     }
 
     /**

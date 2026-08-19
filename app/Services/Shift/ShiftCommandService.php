@@ -33,4 +33,9 @@ class ShiftCommandService
 
         return $this->shiftRepository->update($shift, $data);
     }
+
+    public function delete(Shift $shift): void
+    {
+        $this->shiftRepository->delete($shift);
+    }
 }
