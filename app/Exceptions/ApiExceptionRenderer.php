@@ -63,7 +63,7 @@ final class ApiExceptionRenderer
     }
 
     /**
-     * @param array<string, string|array<int, string>>|null $errors
+     * @param  array<string, array<int, string>>|null  $errors
      */
     private function errorResponse(int $status, string $message, ?array $errors = null): Response
     {
@@ -77,7 +77,7 @@ final class ApiExceptionRenderer
     }
 
     /**
-     * @param array<string, mixed> $errors
+     * @param  array<string, array<int, string>>  $errors
      * @return array<string, array<int, string>>
      */
     private function normalizeValidationErrors(array $errors): array
@@ -85,12 +85,7 @@ final class ApiExceptionRenderer
         $normalized = [];
 
         foreach ($errors as $field => $messages) {
-            if (is_array($messages)) {
-                $normalized[(string) $field] = array_map(static fn(mixed $message): string => (string) $message, $messages);
-                continue;
-            }
-
-            $normalized[(string) $field] = [(string) $messages];
+            $normalized[(string) $field] = array_map(static fn (string $message): string => $message, $messages);
         }
 
         return $normalized;
