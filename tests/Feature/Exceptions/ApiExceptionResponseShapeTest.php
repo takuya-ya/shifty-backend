@@ -75,8 +75,6 @@ class ApiExceptionResponseShapeTest extends TestCase
             ->assertJsonPath('errors.email', ['The email field is required.']);
     }
 
-    /**
-     * @see \App\Exceptions\ApiExceptionRenderer::normalizeValidationErrors */
     public function test_validation_errors_are_always_normalized_to_arrays(): void
     {
         // 手動で文字列のメッセージを持つ ValidationException を投げる
