@@ -63,6 +63,9 @@ Route::prefix('v1')->group(function () {
 
             Route::patch('/shifts/{shift}', [ShiftController::class, 'update'])
                 ->name('api.v1.shifts.update');
+
+            Route::delete('/shifts/{shift}', [ShiftController::class, 'destroy'])
+                ->name('api.v1.shifts.destroy');
         });
     });
 });

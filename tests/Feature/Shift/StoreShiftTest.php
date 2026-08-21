@@ -135,12 +135,10 @@ class StoreShiftTest extends TestCase
         $this->assertDatabaseCount('shifts', 1);
     }
 
-    public function test_duplicate_with_soft_deleted_shift_returns_422(): void
+    public function test_duplicate_with_soft_deleted_shift_returns_201(): void
     {
-        // DB の UNIQUE (staff_id, start_at) はソフトデリート行も対象のため、
-        // バリデーションを素通りさせると DB 例外で 500 になる。その防衛境界を検証する
-        // TODO: タスク19.3.5でUNIQUE制約をソフトデリート対応の生成カラムに変更した場合、
-        //       このテストの期待値は 422 → 201（再作成許可）に反転する想定
+        // DB の UNIQUE は生成カラム unique_delete_key により削除済み行を衝突対象から外すため、
+        // 削除済みシフトと同一の staff_id + start_at でも再作成できることを検証する
         $user = User::factory()->create();
         $staffProfile = StaffProfile::factory()->create();
 
@@ -157,8 +155,7 @@ class StoreShiftTest extends TestCase
                 'start_at' => '2026-08-01 09:00:00',
                 'end_at' => '2026-08-01 18:00:00',
             ])
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors(['staff_id']);
+            ->assertCreated();
     }
 
     public function test_nonexistent_staff_id_returns_422(): void

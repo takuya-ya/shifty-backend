@@ -21,15 +21,19 @@ class UpdateShiftRequest extends FormRequest
             'start_at' => [
                 'sometimes',
                 'date_format:Y-m-d H:i:s',
+                // DB の UNIQUE は生成カラム unique_delete_key により削除済み行を衝突対象から外すため、
+                // バリデーションでも削除済み行を除外して DB の実態に合わせる
                 Rule::unique('shifts', 'start_at')->where(
-                    fn ($query) => $query->where('staff_id', $this->route('shift')->staff_id),
+                    fn ($query) => $query
+                        ->where('staff_id', $this->route('shift')->staff_id)
+                        ->whereNull('deleted_at'),
                 )->ignore($this->route('shift')),
             ],
             'end_at' => ['sometimes', 'date_format:Y-m-d H:i:s', 'after:start_at'],
             'break_start_at' => ['nullable', 'date_format:Y-m-d H:i:s', 'required_with:break_end_at', 'after_or_equal:start_at', 'before:end_at'],
             'break_end_at' => ['nullable', 'date_format:Y-m-d H:i:s', 'required_with:break_start_at', 'after:break_start_at', 'before_or_equal:end_at'],
             'position_id' => ['nullable', 'integer', 'exists:positions,id'],
-            'memo' => ['nullable', 'string', 'max:' . self::MEMO_MAX_LENGTH],
+            'memo' => ['nullable', 'string', 'max:'.self::MEMO_MAX_LENGTH],
         ];
     }
 }

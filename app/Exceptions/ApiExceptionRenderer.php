@@ -34,7 +34,7 @@ final class ApiExceptionRenderer
                 $customMessage = $throwable->getMessage();
                 $message = $customMessage !== '' ? $customMessage : 'Validation failed';
             }
-            $errors = $this->normalizeValidationErrors($throwable->errors());
+            $errors = $throwable->errors();
         } elseif ($throwable instanceof AuthenticationException) {
             $status = 401;
             $message = 'Unauthenticated.';
@@ -63,7 +63,7 @@ final class ApiExceptionRenderer
     }
 
     /**
-     * @param array<string, string|array<int, string>>|null $errors
+     * @param  array<string, array<int, string>>|null  $errors
      */
     private function errorResponse(int $status, string $message, ?array $errors = null): Response
     {
@@ -74,26 +74,6 @@ final class ApiExceptionRenderer
             ),
             $status,
         );
-    }
-
-    /**
-     * @param array<string, mixed> $errors
-     * @return array<string, array<int, string>>
-     */
-    private function normalizeValidationErrors(array $errors): array
-    {
-        $normalized = [];
-
-        foreach ($errors as $field => $messages) {
-            if (is_array($messages)) {
-                $normalized[(string) $field] = array_map(static fn(mixed $message): string => (string) $message, $messages);
-                continue;
-            }
-
-            $normalized[(string) $field] = [(string) $messages];
-        }
-
-        return $normalized;
     }
 
     private function shouldRenderAsJson(Request $request): bool
