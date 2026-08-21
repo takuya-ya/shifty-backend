@@ -12,6 +12,7 @@ use App\Models\Shift;
 use App\Services\Shift\ShiftCommandService;
 use App\Services\Shift\ShiftQueryService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class ShiftController extends Controller
 {
@@ -41,10 +42,10 @@ class ShiftController extends Controller
         return $this->success(data: new ShiftResource($updatedShift));
     }
 
-    public function destroy(Shift $shift): JsonResponse
+    public function destroy(Shift $shift): Response
     {
         $this->shiftCommandService->delete($shift);
 
-        return $this->success(status: 204);
+        return response()->noContent();
     }
 }
