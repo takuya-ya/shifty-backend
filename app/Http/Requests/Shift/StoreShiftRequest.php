@@ -25,10 +25,12 @@ class StoreShiftRequest extends FormRequest
                 'required',
                 'integer',
                 'exists:staff_profiles,id',
-                // DB の UNIQUE (staff_id, start_at) はソフトデリート行も含むため、
-                // バリデーションでも削除済み行を除外せず DB の実態に合わせる
+                // DB の UNIQUE は生成カラム unique_delete_key により削除済み行を衝突対象から外すため、
+                // バリデーションでも削除済み行を除外して DB の実態に合わせる
                 Rule::unique('shifts', 'staff_id')->where(
-                    fn ($query) => $query->where('start_at', $this->input('start_at')),
+                    fn ($query) => $query
+                        ->where('start_at', $this->input('start_at'))
+                        ->whereNull('deleted_at'),
                 ),
             ],
             'start_at' => ['required', 'date_format:Y-m-d H:i:s'],
