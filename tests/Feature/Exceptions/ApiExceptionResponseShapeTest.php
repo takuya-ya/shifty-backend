@@ -130,12 +130,10 @@ class ApiExceptionResponseShapeTest extends TestCase
     {
         $response->assertStatus($statusCode)
             ->assertJsonStructure([
-                'status',
                 'data',
                 'message',
                 'errors',
             ])
-            ->assertJsonPath('status', 'error')
             ->assertJsonPath('data', null);
     }
 

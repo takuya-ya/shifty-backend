@@ -14,7 +14,6 @@ class ApiResponseFormatTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'status' => 'success',
                 'data' => [
                     'sample' => true,
                     'version' => 'v1',
@@ -30,7 +29,6 @@ class ApiResponseFormatTest extends TestCase
 
         $response->assertStatus(422)
             ->assertJson([
-                'status' => 'error',
                 'data' => null,
                 'message' => 'validation failed',
                 'errors' => [

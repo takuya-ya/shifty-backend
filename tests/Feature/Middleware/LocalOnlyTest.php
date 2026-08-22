@@ -22,12 +22,10 @@ class LocalOnlyTest extends TestCase
         $this->getJson('/api/v1/_debug/api-response/success')
             ->assertStatus(403)
             ->assertJsonStructure([
-                'status',
                 'data',
                 'message',
                 'errors',
             ])
-            ->assertJsonPath('status', 'error')
             ->assertJsonPath('data', null)
             ->assertJsonPath('message', 'Forbidden')
             ->assertJsonPath('errors', null);

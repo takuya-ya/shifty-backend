@@ -16,7 +16,7 @@ class AuthenticationTest extends TestCase
 
         $response = $this->post('/api/v1/login', [
             'email' => $user->email,
-            'password' => 'password',
+            'password' => 'shifty2026',
         ]);
 
         $this->assertAuthenticated();
