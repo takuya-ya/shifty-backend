@@ -15,6 +15,8 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
+    public const DEFAULT_PASSWORD = 'shifty2026';
+
     protected static ?string $password;
 
     /**
@@ -25,7 +27,7 @@ class UserFactory extends Factory
         return [
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('shifty2026'),
+            'password' => static::$password ??= Hash::make(self::DEFAULT_PASSWORD),
             'remember_token' => Str::random(10),
         ];
     }
