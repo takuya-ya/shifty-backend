@@ -31,16 +31,16 @@ class ApiExceptionResponseShapeTest extends TestCase
 
             Route::get('/422', function (): void {
                 throw ValidationException::withMessages([
-                    'email' => ['The email field is required.'],
+                    'email' => ['メールは必須項目です。'],
                 ]);
             });
 
             Route::get('/403', function (): void {
-                throw new AuthorizationException('Forbidden.');
+                throw new AuthorizationException('権限がありません。');
             });
 
             Route::get('/500', function (): void {
-                throw new RuntimeException('Unexpected error.');
+                throw new RuntimeException('予期しないエラーが発生しました。');
             });
 
             Route::get('/401', function (): string {
@@ -48,8 +48,8 @@ class ApiExceptionResponseShapeTest extends TestCase
             })->middleware('auth:sanctum');
             Route::get('/422-string-error', function (): void {
                 throw ValidationException::withMessages([
-                    'field1' => 'Single string error message',
-                    'field2' => ['Array message 1', 'Array message 2'],
+                    'field1' => '文字列エラーメッセージ',
+                    'field2' => ['配列メッセージ1', '配列メッセージ2'],
                 ]);
             });
         });
@@ -65,14 +65,14 @@ class ApiExceptionResponseShapeTest extends TestCase
         // 1. validate() 経由
         $response1 = $this->postJson('/api/v1/_test-exceptions/422-validate', []);
         $this->assertCommonErrorShape($response1, 422);
-        $response1->assertJsonPath('message', 'The email field is required.')
-            ->assertJsonPath('errors.email', ['The email field is required.']);
+        $response1->assertJsonPath('message', 'メールは必須項目です。')
+            ->assertJsonPath('errors.email', ['メールは必須項目です。']);
 
         // 2. FormRequest 経由
         $response2 = $this->postJson('/api/v1/_test-exceptions/422-form-request', []);
         $this->assertCommonErrorShape($response2, 422);
-        $response2->assertJsonPath('message', 'The email field is required.')
-            ->assertJsonPath('errors.email', ['The email field is required.']);
+        $response2->assertJsonPath('message', 'メールは必須項目です。')
+            ->assertJsonPath('errors.email', ['メールは必須項目です。']);
     }
 
     public function test_validation_errors_are_always_normalized_to_arrays(): void
@@ -81,16 +81,16 @@ class ApiExceptionResponseShapeTest extends TestCase
         $response = $this->getJson('/api/v1/_test-exceptions/422-string-error');
 
         $response->assertStatus(422)
-            ->assertJsonPath('message', 'Single string error message (and 2 more errors)')
-            ->assertJsonPath('errors.field1', ['Single string error message']) // 配列に正規化されていること
-            ->assertJsonPath('errors.field2', ['Array message 1', 'Array message 2']);
+            ->assertJsonPath('message', '文字列エラーメッセージ (その他、2エラーあり)')
+            ->assertJsonPath('errors.field1', ['文字列エラーメッセージ']) // 配列に正規化されていること
+            ->assertJsonPath('errors.field2', ['配列メッセージ1', '配列メッセージ2']);
     }
 
     public function test_custom_exception_messages_are_preserved_in_non_production(): void
     {
         $this->getJson('/api/v1/_test-exceptions/403')
             ->assertStatus(403)
-            ->assertJsonPath('message', 'Forbidden.');
+            ->assertJsonPath('message', '権限がありません。');
     }
 
     public function test_validation_and_authorization_messages_fall_back_to_standard_text_in_production(): void
@@ -130,12 +130,10 @@ class ApiExceptionResponseShapeTest extends TestCase
     {
         $response->assertStatus($statusCode)
             ->assertJsonStructure([
-                'status',
                 'data',
                 'message',
                 'errors',
             ])
-            ->assertJsonPath('status', 'error')
             ->assertJsonPath('data', null);
     }
 

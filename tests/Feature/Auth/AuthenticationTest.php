@@ -3,6 +3,7 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -16,7 +17,7 @@ class AuthenticationTest extends TestCase
 
         $response = $this->post('/api/v1/login', [
             'email' => $user->email,
-            'password' => 'password',
+            'password' => UserFactory::DEFAULT_PASSWORD,
         ]);
 
         $this->assertAuthenticated();
