@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\StaffProfileController;
 use App\Http\Controllers\Test\ApiResponseSandboxController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -66,6 +67,9 @@ Route::prefix('v1')->group(function () {
 
             Route::delete('/shifts/{shift}', [ShiftController::class, 'destroy'])
                 ->name('api.v1.shifts.destroy');
+
+            Route::get('/staffs', [StaffProfileController::class, 'index'])
+                ->name('api.v1.staffs.index');
         });
     });
 });
