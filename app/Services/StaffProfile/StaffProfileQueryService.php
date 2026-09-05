@@ -13,7 +13,7 @@ class StaffProfileQueryService
         private readonly StaffProfileRepository $staffProfileRepository,
     ) {}
 
-    public function getStaff(): Collection
+    public function getStaffProfiles(): Collection
     {
         return $this->staffProfileRepository->findAll();
     }

@@ -16,7 +16,7 @@ class StaffProfileController extends Controller
 
     public function index(): JsonResponse
     {
-        $staffProfiles = $this->staffProfileQueryService->getStaff();
+        $staffProfiles = $this->staffProfileQueryService->getStaffProfiles();
 
         return $this->success(data: StaffProfileResource::collection($staffProfiles));
     }
