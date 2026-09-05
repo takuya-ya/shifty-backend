@@ -21,6 +21,11 @@ class StaffProfile extends Model
         'max_hours_per_week',
     ];
 
+    protected $casts = [
+        'hourly_wage' => 'decimal:2',
+        'is_student' => 'boolean',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
