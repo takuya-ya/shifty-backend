@@ -11,6 +11,6 @@ class StaffProfileRepository
 {
     public function findAll(): Collection
     {
-        return StaffProfile::with('positions')->get();
+        return StaffProfile::with('positions')->orderBy('id')->get();
     }
 }
