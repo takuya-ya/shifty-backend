@@ -21,8 +21,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // PositionSeeder 実行後のIDを名前から解決する（IDの採番順に依存しないため）
-        $hallId = Position::where('name', 'ホール')->value('id');
-        $kitchenId = Position::where('name', 'キッチン')->value('id');
+        $positionIdsByName = Position::whereIn('name', ['ホール', 'キッチン'])->pluck('id', 'name');
+        $hallId = $positionIdsByName['ホール'];
+        $kitchenId = $positionIdsByName['キッチン'];
 
         // 管理者ユーザー（exists チェックで重複実行に対応）
         if (! User::where('email', 'admin@example.com')->exists()) {
@@ -33,8 +34,8 @@ class DatabaseSeeder extends Seeder
         }
 
         // if 内に置くと既存ユーザーの場合スキップされるため、if の外で実行する
-        User::where('email', 'admin@example.com')->first()
-            ->staffProfile->positions()->sync([$hallId]);
+        User::where('email', 'admin@example.com')->firstOrFail()
+            ->staffProfile()->firstOrFail()->positions()->sync([$hallId]);
 
         // スタッフユーザー × 5（重複実行に備えて exists チェック）
         foreach (range(1, 5) as $i) {
@@ -52,8 +53,8 @@ class DatabaseSeeder extends Seeder
                 default => [$kitchenId],
             };
 
-            User::where('email', $email)->first()
-                ->staffProfile->positions()->sync($positionIds);
+            User::where('email', $email)->firstOrFail()
+                ->staffProfile()->firstOrFail()->positions()->sync($positionIds);
         }
 
         $this->call([
