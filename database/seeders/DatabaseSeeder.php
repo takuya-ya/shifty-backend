@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\Position;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -19,13 +20,22 @@ class DatabaseSeeder extends Seeder
             PositionSeeder::class,
         ]);
 
+        // PositionSeeder 実行後のIDを名前から解決する（IDの採番順に依存しないため）
+        $positionIdsByName = Position::whereIn('name', ['ホール', 'キッチン'])->pluck('id', 'name');
+        $hallId = $positionIdsByName['ホール'];
+        $kitchenId = $positionIdsByName['キッチン'];
+
         // 管理者ユーザー（exists チェックで重複実行に対応）
-        if (! \App\Models\User::where('email', 'admin@example.com')->exists()) {
+        if (! User::where('email', 'admin@example.com')->exists()) {
             User::factory()
                 ->admin()
                 ->withStaffProfile(['name' => '管理者'])
                 ->create(['email' => 'admin@example.com']);
         }
+
+        // if 内に置くと既存ユーザーの場合スキップされるため、if の外で実行する
+        User::where('email', 'admin@example.com')->firstOrFail()
+            ->staffProfile()->firstOrFail()->positions()->sync([$hallId]);
 
         // スタッフユーザー × 5（重複実行に備えて exists チェック）
         foreach (range(1, 5) as $i) {
@@ -36,6 +46,15 @@ class DatabaseSeeder extends Seeder
                     ->withStaffProfile(['name' => "スタッフ{$i}"])
                     ->create(['email' => $email]);
             }
+
+            $positionIds = match (true) {
+                $i <= 2 => [$hallId],
+                $i === 3 => [$hallId, $kitchenId],
+                default => [$kitchenId],
+            };
+
+            User::where('email', $email)->firstOrFail()
+                ->staffProfile()->firstOrFail()->positions()->sync($positionIds);
         }
 
         $this->call([
