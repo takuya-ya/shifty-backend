@@ -33,7 +33,8 @@ class StaffProfile extends Model
 
     public function positions()
     {
-        return $this->belongsToMany(Position::class, 'staff_positions', 'staff_id', 'position_id');
+        return $this->belongsToMany(Position::class, 'staff_positions', 'staff_id', 'position_id')
+            ->orderBy('positions.id');
     }
 
     public function shifts()
