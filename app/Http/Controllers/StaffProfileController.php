@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StaffProfile\StoreStaffRequest;
 use App\Http\Resources\StaffProfileResource;
 use App\Services\StaffProfile\StaffProfileCommandService;
 use App\Services\StaffProfile\StaffProfileQueryService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class StaffProfileController extends Controller
 {
@@ -24,9 +24,9 @@ class StaffProfileController extends Controller
         return $this->success(data: StaffProfileResource::collection($staffProfiles));
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreStaffRequest $request): JsonResponse
     {
-        $staffProfile = $this->staffProfileCommandService->create($request->all());
+        $staffProfile = $this->staffProfileCommandService->create($request->validated());
 
         return $this->success(data: new StaffProfileResource($staffProfile), status: 201);
     }
