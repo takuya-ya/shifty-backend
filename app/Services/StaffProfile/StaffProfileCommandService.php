@@ -18,5 +18,6 @@ class StaffProfileCommandService
      */
     public function create(array $data): StaffProfile
     {
+        return $this->staffProfileRepository->create($data);
     }
 }
