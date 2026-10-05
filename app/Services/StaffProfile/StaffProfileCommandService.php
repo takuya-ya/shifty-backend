@@ -6,6 +6,7 @@ namespace App\Services\StaffProfile;
 
 use App\Models\StaffProfile;
 use App\Repositories\StaffProfileRepository;
+use Illuminate\Support\Facades\DB;
 
 class StaffProfileCommandService
 {
@@ -18,6 +19,6 @@ class StaffProfileCommandService
      */
     public function create(array $data): StaffProfile
     {
-        return $this->staffProfileRepository->create($data);
+        return DB::transaction(fn () => $this->staffProfileRepository->create($data));
     }
 }
