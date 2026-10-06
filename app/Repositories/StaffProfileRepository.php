@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Models\StaffProfile;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 
 class StaffProfileRepository
 {
@@ -20,9 +21,8 @@ class StaffProfileRepository
     public function create(array $data): StaffProfile
     {
         $positionIds = $data['position_ids'];
-        unset($data['position_ids']);
 
-        $staffProfile = StaffProfile::create($data);
+        $staffProfile = StaffProfile::create(Arr::except($data, ['position_ids']));
         $staffProfile->positions()->attach($positionIds);
         $staffProfile->load('positions');
 
