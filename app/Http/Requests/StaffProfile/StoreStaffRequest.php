@@ -24,7 +24,7 @@ class StoreStaffRequest extends FormRequest
             'hourly_wage' => ['required', 'integer', 'min:0', 'max:'.self::HOURLY_WAGE_MAX],
             'memo' => ['nullable', 'string', 'max:'.self::MEMO_MAX_LENGTH],
             'position_ids' => ['required', 'array', 'min:1'],
-            'position_ids.*' => ['integer', 'exists:positions,id'],
+            'position_ids.*' => ['integer', 'distinct', 'exists:positions,id'],
         ];
     }
 }

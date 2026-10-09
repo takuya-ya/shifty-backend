@@ -135,6 +135,20 @@ class StoreStaffProfileTest extends TestCase
         $this->assertDatabaseCount('staff_profiles', 0);
     }
 
+    public function test_duplicate_position_ids_returns_422(): void
+    {
+        $user = User::factory()->create();
+        $positionId = $this->positions->first()->id;
+        $payload = $this->validPayload(['position_ids' => [$positionId, $positionId]]);
+
+        $this->actingAs($user)
+            ->postJson(self::ENDPOINT, $payload)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['position_ids.0', 'position_ids.1']);
+
+        $this->assertDatabaseCount('staff_profiles', 0);
+    }
+
     public function test_hourly_wage_exceeding_max_returns_422(): void
     {
         $user = User::factory()->create();
