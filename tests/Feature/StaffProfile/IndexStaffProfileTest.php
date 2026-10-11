@@ -34,7 +34,7 @@ class IndexStaffProfileTest extends TestCase
     public function test_returns_staff_list_with_positions(): void
     {
         $user = User::factory()->create();
-        $staffProfile = StaffProfile::factory()->create();
+        $staffProfile = StaffProfile::factory()->create(['hourly_wage' => 1200]);
         $positions = Position::factory()->count(2)->create();
         $staffProfile->positions()->attach($positions->pluck('id'));
 
@@ -46,7 +46,7 @@ class IndexStaffProfileTest extends TestCase
         $data = $response->json('data.0');
         $this->assertSame($staffProfile->id, $data['id']);
         $this->assertSame($staffProfile->name, $data['name']);
-        $this->assertArrayHasKey('hourly_wage', $data);
+        $this->assertSame(1200, $data['hourly_wage']);
         $this->assertArrayHasKey('is_student', $data);
         $this->assertArrayHasKey('memo', $data);
         $this->assertCount(2, $data['positions']);

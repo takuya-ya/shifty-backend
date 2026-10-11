@@ -70,6 +70,9 @@ Route::prefix('v1')->group(function () {
 
             Route::get('/staffs', [StaffProfileController::class, 'index'])
                 ->name('api.v1.staffs.index');
+
+            Route::post('/staffs', [StaffProfileController::class, 'store'])
+                ->name('api.v1.staffs.store');
         });
     });
 });

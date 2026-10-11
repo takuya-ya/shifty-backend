@@ -22,7 +22,7 @@ class StaffProfile extends Model
     ];
 
     protected $casts = [
-        'hourly_wage' => 'decimal:2',
+        'hourly_wage' => 'integer',
         'is_student' => 'boolean',
     ];
 
