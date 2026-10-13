@@ -22,22 +22,22 @@ final class ApiExceptionRenderer
         }
 
         $status = 500;
-        $message = 'Server Error';
+        $message = __('Server Error');
         $errors = null;
 
         if ($throwable instanceof ValidationException) {
             $status = 422;
             // 本番環境では常に標準化されたメッセージを使用し、非本番ではカスタムメッセージを優先する
             if (app()->isProduction()) {
-                $message = 'Validation failed';
+                $message = __('Validation failed');
             } else {
                 $customMessage = $throwable->getMessage();
-                $message = $customMessage !== '' ? $customMessage : 'Validation failed';
+                $message = $customMessage !== '' ? $customMessage : __('Validation failed');
             }
             $errors = $throwable->errors();
         } elseif ($throwable instanceof AuthenticationException) {
             $status = 401;
-            $message = 'Unauthenticated.';
+            $message = __('Unauthenticated.');
         } elseif ($throwable instanceof AuthorizationException) {
             $status = 403;
             $standardText = Response::$statusTexts[$status] ?? 'Error';
