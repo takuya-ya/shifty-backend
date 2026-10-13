@@ -108,7 +108,9 @@ class ApiExceptionResponseShapeTest extends TestCase
 
     public function test_response_shape_is_same_for_401(): void
     {
-        $this->assertCommonErrorShape($this->get('/api/v1/_test-exceptions/401'), 401);
+        $response = $this->get('/api/v1/_test-exceptions/401');
+        $this->assertCommonErrorShape($response, 401);
+        $response->assertJsonPath('message', '認証されていません。');
     }
 
     public function test_response_shape_is_same_for_403(): void
@@ -123,7 +125,9 @@ class ApiExceptionResponseShapeTest extends TestCase
 
     public function test_response_shape_is_same_for_500(): void
     {
-        $this->assertCommonErrorShape($this->get('/api/v1/_test-exceptions/500'), 500);
+        $response = $this->get('/api/v1/_test-exceptions/500');
+        $this->assertCommonErrorShape($response, 500);
+        $response->assertJsonPath('message', 'サーバーエラー');
     }
 
     private function assertCommonErrorShape($response, int $statusCode): void
