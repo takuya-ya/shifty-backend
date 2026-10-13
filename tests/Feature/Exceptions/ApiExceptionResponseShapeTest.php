@@ -98,7 +98,7 @@ class ApiExceptionResponseShapeTest extends TestCase
         $this->runInEnvironment('production', function (): void {
             $this->getJson('/api/v1/_test-exceptions/422-string-error')
                 ->assertStatus(422)
-                ->assertJsonPath('message', 'Validation failed');
+                ->assertJsonPath('message', 'バリデーションに失敗しました');
 
             $this->getJson('/api/v1/_test-exceptions/403')
                 ->assertStatus(403)
