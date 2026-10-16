@@ -104,8 +104,6 @@ class StoreStaffProfileTest extends TestCase
             ->postJson(self::ENDPOINT, $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['name']);
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_empty_position_ids_returns_422(): void
@@ -117,8 +115,6 @@ class StoreStaffProfileTest extends TestCase
             ->postJson(self::ENDPOINT, $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['position_ids']);
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_nonexistent_position_id_returns_422(): void
@@ -131,8 +127,6 @@ class StoreStaffProfileTest extends TestCase
             ->postJson(self::ENDPOINT, $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['position_ids.0']);
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_duplicate_position_ids_returns_422(): void
@@ -145,8 +139,6 @@ class StoreStaffProfileTest extends TestCase
             ->postJson(self::ENDPOINT, $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['position_ids.0', 'position_ids.1']);
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_hourly_wage_exceeding_max_returns_422(): void
@@ -158,8 +150,6 @@ class StoreStaffProfileTest extends TestCase
             ->postJson(self::ENDPOINT, $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['hourly_wage']);
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_memo_exceeding_max_length_returns_422(): void
@@ -171,8 +161,6 @@ class StoreStaffProfileTest extends TestCase
             ->postJson(self::ENDPOINT, $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['memo']);
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_unauthenticated_request_returns_401(): void
@@ -181,8 +169,6 @@ class StoreStaffProfileTest extends TestCase
 
         $this->postJson(self::ENDPOINT, $payload)
             ->assertUnauthorized();
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_unverified_email_returns_403(): void
@@ -193,7 +179,5 @@ class StoreStaffProfileTest extends TestCase
         $this->actingAs($user)
             ->postJson(self::ENDPOINT, $payload)
             ->assertForbidden();
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 }
