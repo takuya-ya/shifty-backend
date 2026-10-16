@@ -21,4 +21,12 @@ class StaffProfileCommandService
     {
         return DB::transaction(fn () => $this->staffProfileRepository->create($data));
     }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function update(StaffProfile $staff, array $data): StaffProfile
+    {
+        return $staff;
+    }
 }
