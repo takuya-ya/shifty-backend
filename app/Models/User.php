@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -54,16 +56,20 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Get the staff profile associated with the user.
+     *
+     * @return HasOne<StaffProfile, $this>
      */
-    public function staffProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function staffProfile(): HasOne
     {
         return $this->hasOne(StaffProfile::class, 'user_id');
     }
 
     /**
      * The roles that belong to the user.
+     *
+     * @return BelongsToMany<Role, $this>
      */
-    public function roles(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'user_roles');
     }

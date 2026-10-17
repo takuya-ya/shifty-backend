@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Shift extends Model
@@ -29,12 +30,18 @@ class Shift extends Model
         'break_end_at' => 'datetime',
     ];
 
-    public function staffProfile()
+    /**
+     * @return BelongsTo<StaffProfile, $this>
+     */
+    public function staffProfile(): BelongsTo
     {
         return $this->belongsTo(StaffProfile::class, 'staff_id');
     }
 
-    public function position()
+    /**
+     * @return BelongsTo<Position, $this>
+     */
+    public function position(): BelongsTo
     {
         return $this->belongsTo(Position::class);
     }
