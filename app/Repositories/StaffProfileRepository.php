@@ -28,4 +28,18 @@ class StaffProfileRepository
 
         return $staffProfile;
     }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function update(StaffProfile $staff, array $data): StaffProfile
+    {
+        $positionIds = $data['position_ids'];
+
+        $staff->update(Arr::except($data, ['position_ids']));
+        $staff->positions()->sync($positionIds);
+        $staff->load('positions');
+
+        return $staff;
+    }
 }

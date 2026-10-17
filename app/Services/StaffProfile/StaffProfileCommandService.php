@@ -27,6 +27,6 @@ class StaffProfileCommandService
      */
     public function update(StaffProfile $staff, array $data): StaffProfile
     {
-        return $staff;
+        return DB::transaction(fn () => $this->staffProfileRepository->update($staff, $data));
     }
 }
