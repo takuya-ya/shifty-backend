@@ -27,7 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array<string>
+     * @var list<string>
      */
     protected $appends = ['name'];
 

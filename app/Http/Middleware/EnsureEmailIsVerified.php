@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Http\Responses\ApiResponsePayload;
 use Closure;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,11 +20,7 @@ class EnsureEmailIsVerified
             message: __('auth.email_unverified'),
         );
 
-        if (
-            ! $request->user() ||
-            ($request->user() instanceof MustVerifyEmail &&
-                ! $request->user()->hasVerifiedEmail())
-        ) {
+        if (! $request->user() || ! $request->user()->hasVerifiedEmail()) {
             return response()->json($payload, 403);
         }
 
