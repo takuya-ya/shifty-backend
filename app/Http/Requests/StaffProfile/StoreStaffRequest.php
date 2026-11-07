@@ -19,7 +19,7 @@ class StoreStaffRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'date_of_birth' => ['nullable', 'date'],
+            'date_of_birth' => ['nullable', 'date_format:Y-m-d'],
             'is_student' => ['nullable', 'boolean'],
             'hourly_wage' => ['required', 'integer', 'min:0', 'max:'.self::HOURLY_WAGE_MAX],
             'memo' => ['nullable', 'string', 'max:'.self::MEMO_MAX_LENGTH],
