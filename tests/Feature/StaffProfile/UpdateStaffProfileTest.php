@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\StaffProfile;
 
+use App\Http\Requests\StaffProfile\UpdateStaffRequest;
 use App\Models\Position;
 use App\Models\StaffProfile;
 use App\Models\User;
@@ -163,7 +164,7 @@ class UpdateStaffProfileTest extends TestCase
     public function test_hourly_wage_exceeding_max_returns_422(): void
     {
         $user = User::factory()->create();
-        $payload = $this->validPayload(['hourly_wage' => 5001]);
+        $payload = $this->validPayload(['hourly_wage' => UpdateStaffRequest::HOURLY_WAGE_MAX + 1]);
 
         $this->actingAs($user)
             ->putJson($this->endpoint(), $payload)
@@ -174,7 +175,7 @@ class UpdateStaffProfileTest extends TestCase
     public function test_memo_exceeding_max_length_returns_422(): void
     {
         $user = User::factory()->create();
-        $payload = $this->validPayload(['memo' => str_repeat('あ', 1001)]);
+        $payload = $this->validPayload(['memo' => str_repeat('あ', UpdateStaffRequest::MEMO_MAX_LENGTH + 1)]);
 
         $this->actingAs($user)
             ->putJson($this->endpoint(), $payload)
