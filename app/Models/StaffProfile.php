@@ -13,6 +13,10 @@ class StaffProfile extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const MEMO_MAX_LENGTH = 1000;
+
+    public const HOURLY_WAGE_MAX = 5000;
+
     protected $fillable = [
         'user_id',
         'name',

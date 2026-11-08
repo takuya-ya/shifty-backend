@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Feature\StaffProfile;
 
-use App\Http\Requests\StaffProfile\StoreStaffRequest;
 use App\Models\Position;
+use App\Models\StaffProfile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -145,7 +145,7 @@ class StoreStaffProfileTest extends TestCase
     public function test_hourly_wage_exceeding_max_returns_422(): void
     {
         $user = User::factory()->create();
-        $payload = $this->validPayload(['hourly_wage' => StoreStaffRequest::HOURLY_WAGE_MAX + 1]);
+        $payload = $this->validPayload(['hourly_wage' => StaffProfile::HOURLY_WAGE_MAX + 1]);
 
         $this->actingAs($user)
             ->postJson(self::ENDPOINT, $payload)
@@ -156,7 +156,7 @@ class StoreStaffProfileTest extends TestCase
     public function test_memo_exceeding_max_length_returns_422(): void
     {
         $user = User::factory()->create();
-        $payload = $this->validPayload(['memo' => str_repeat('あ', StoreStaffRequest::MEMO_MAX_LENGTH + 1)]);
+        $payload = $this->validPayload(['memo' => str_repeat('あ', StaffProfile::MEMO_MAX_LENGTH + 1)]);
 
         $this->actingAs($user)
             ->postJson(self::ENDPOINT, $payload)
