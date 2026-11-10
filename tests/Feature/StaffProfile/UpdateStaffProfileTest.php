@@ -25,7 +25,13 @@ class UpdateStaffProfileTest extends TestCase
     {
         parent::setUp();
         $this->positions = Position::factory()->count(2)->create();
-        $this->staffProfile = StaffProfile::factory()->create();
+        // 更新前の値が送信値と同じだと、更新が無視されてもテストが通るため、送信値と必ず異なる値に固定する
+        $this->staffProfile = StaffProfile::factory()->create([
+            'name' => '山田 太郎',
+            'hourly_wage' => 1000,
+            'is_student' => true,
+            'date_of_birth' => '1990-01-01',
+        ]);
         $this->staffProfile->positions()->attach($this->positions->pluck('id'));
     }
 
