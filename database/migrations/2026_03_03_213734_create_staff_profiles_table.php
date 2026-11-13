@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->unique()->nullable();
             $table->string('name')->comment('スタッフ名');
             $table->date('date_of_birth')->nullable()->comment('年少者チェック用');
-            $table->boolean('is_student')->nullable()->comment('学生フラグ');
-            $table->decimal('hourly_wage', 8, 2)->nullable()->comment('時給');
+            $table->boolean('is_student')->comment('学生フラグ');
+            $table->decimal('hourly_wage', 8, 2)->comment('時給');
             $table->text('memo')->nullable()->comment('備考');
             $table->integer('max_consecutive_days')->nullable()->comment('最大連勤日数 (Phase3)');
             $table->integer('max_hours_per_week')->nullable()->comment('週最大労働時間 (Phase3)');

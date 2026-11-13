@@ -17,6 +17,11 @@ class StaffProfile extends Model
 
     public const HOURLY_WAGE_MAX = 5000;
 
+    // ユーザー登録では学生か・時給を入力しないため、スタッフ編集で設定するまでの仮の値
+    public const INITIAL_IS_STUDENT = false;
+
+    public const INITIAL_HOURLY_WAGE = 0;
+
     protected $fillable = [
         'user_id',
         'name',

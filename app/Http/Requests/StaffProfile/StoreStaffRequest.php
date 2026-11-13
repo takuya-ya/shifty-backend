@@ -17,7 +17,7 @@ class StoreStaffRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'date_of_birth' => ['nullable', 'date_format:Y-m-d'],
-            'is_student' => ['nullable', 'boolean'],
+            'is_student' => ['required', 'boolean'],
             'hourly_wage' => ['required', 'integer', 'min:0', 'max:'.StaffProfile::HOURLY_WAGE_MAX],
             'memo' => ['nullable', 'string', 'max:'.StaffProfile::MEMO_MAX_LENGTH],
             'position_ids' => ['required', 'array', 'min:1'],

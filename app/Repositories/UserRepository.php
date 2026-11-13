@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Models\StaffProfile;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -51,6 +52,8 @@ class UserRepository
 
         $user->staffProfile()->create([
             'name' => $data['name'],
+            'is_student' => StaffProfile::INITIAL_IS_STUDENT,
+            'hourly_wage' => StaffProfile::INITIAL_HOURLY_WAGE,
         ]);
 
         return $user;

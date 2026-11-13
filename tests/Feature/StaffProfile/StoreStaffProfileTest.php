@@ -35,6 +35,7 @@ class StoreStaffProfileTest extends TestCase
         return array_merge([
             'name' => '山田 太郎',
             'position_ids' => $this->positions->pluck('id')->all(),
+            'is_student' => false,
             'hourly_wage' => 1000,
         ], $overrides);
     }
