@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Http\Responses\ApiResponsePayload;
 use Closure;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,11 +20,9 @@ class EnsureEmailIsVerified
             message: __('auth.email_unverified'),
         );
 
-        if (
-            ! $request->user() ||
-            ($request->user() instanceof MustVerifyEmail &&
-                ! $request->user()->hasVerifiedEmail())
-        ) {
+        // Laravel 標準は MustVerifyEmail 未実装のモデルを検査せず通すが、認証モデルが User のみの
+        // 本アプリでは instanceof が常に true になる（PHPStan 指摘）ため外し、全ユーザーを検査する
+        if (! $request->user() || ! $request->user()->hasVerifiedEmail()) {
             return response()->json($payload, 403);
         }
 

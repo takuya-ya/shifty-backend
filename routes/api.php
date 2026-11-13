@@ -73,6 +73,9 @@ Route::prefix('v1')->group(function () {
 
             Route::post('/staffs', [StaffProfileController::class, 'store'])
                 ->name('api.v1.staffs.store');
+
+            Route::put('/staffs/{staff}', [StaffProfileController::class, 'update'])
+                ->name('api.v1.staffs.update');
         });
     });
 });

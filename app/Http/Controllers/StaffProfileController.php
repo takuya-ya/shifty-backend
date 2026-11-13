@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StaffProfile\StoreStaffRequest;
+use App\Http\Requests\StaffProfile\UpdateStaffRequest;
 use App\Http\Resources\StaffProfileResource;
+use App\Models\StaffProfile;
 use App\Services\StaffProfile\StaffProfileCommandService;
 use App\Services\StaffProfile\StaffProfileQueryService;
 use Illuminate\Http\JsonResponse;
@@ -29,5 +31,12 @@ class StaffProfileController extends Controller
         $staffProfile = $this->staffProfileCommandService->create($request->validated());
 
         return $this->success(data: new StaffProfileResource($staffProfile), status: 201);
+    }
+
+    public function update(UpdateStaffRequest $request, StaffProfile $staff): JsonResponse
+    {
+        $staffProfile = $this->staffProfileCommandService->update($staff, $request->validated());
+
+        return $this->success(data: new StaffProfileResource($staffProfile), status: 200);
     }
 }

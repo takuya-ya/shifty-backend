@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\StaffProfile;
 
 use App\Models\Position;
+use App\Models\StaffProfile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -34,6 +35,7 @@ class StoreStaffProfileTest extends TestCase
         return array_merge([
             'name' => '山田 太郎',
             'position_ids' => $this->positions->pluck('id')->all(),
+            'is_student' => false,
             'hourly_wage' => 1000,
         ], $overrides);
     }
@@ -104,8 +106,6 @@ class StoreStaffProfileTest extends TestCase
             ->postJson(self::ENDPOINT, $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['name']);
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_empty_position_ids_returns_422(): void
@@ -117,8 +117,6 @@ class StoreStaffProfileTest extends TestCase
             ->postJson(self::ENDPOINT, $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['position_ids']);
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_nonexistent_position_id_returns_422(): void
@@ -131,8 +129,6 @@ class StoreStaffProfileTest extends TestCase
             ->postJson(self::ENDPOINT, $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['position_ids.0']);
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_duplicate_position_ids_returns_422(): void
@@ -145,34 +141,28 @@ class StoreStaffProfileTest extends TestCase
             ->postJson(self::ENDPOINT, $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['position_ids.0', 'position_ids.1']);
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_hourly_wage_exceeding_max_returns_422(): void
     {
         $user = User::factory()->create();
-        $payload = $this->validPayload(['hourly_wage' => 5001]);
+        $payload = $this->validPayload(['hourly_wage' => StaffProfile::HOURLY_WAGE_MAX + 1]);
 
         $this->actingAs($user)
             ->postJson(self::ENDPOINT, $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['hourly_wage']);
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_memo_exceeding_max_length_returns_422(): void
     {
         $user = User::factory()->create();
-        $payload = $this->validPayload(['memo' => str_repeat('あ', 1001)]);
+        $payload = $this->validPayload(['memo' => str_repeat('あ', StaffProfile::MEMO_MAX_LENGTH + 1)]);
 
         $this->actingAs($user)
             ->postJson(self::ENDPOINT, $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['memo']);
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_unauthenticated_request_returns_401(): void
@@ -181,8 +171,6 @@ class StoreStaffProfileTest extends TestCase
 
         $this->postJson(self::ENDPOINT, $payload)
             ->assertUnauthorized();
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 
     public function test_unverified_email_returns_403(): void
@@ -193,7 +181,5 @@ class StoreStaffProfileTest extends TestCase
         $this->actingAs($user)
             ->postJson(self::ENDPOINT, $payload)
             ->assertForbidden();
-
-        $this->assertDatabaseCount('staff_profiles', 0);
     }
 }

@@ -23,6 +23,8 @@ class AuthApiTest extends TestCase
 
         $user->staffProfile()->create([
             'name' => 'Test User',
+            'is_student' => false,
+            'hourly_wage' => 1000,
         ]);
     }
 

@@ -4,11 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StaffProfile extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public const MEMO_MAX_LENGTH = 1000;
+
+    public const HOURLY_WAGE_MAX = 5000;
+
+    // ユーザー登録では学生か・時給を入力しないため、スタッフ編集で設定するまでの仮の値
+    public const INITIAL_IS_STUDENT = false;
+
+    public const INITIAL_HOURLY_WAGE = 0;
 
     protected $fillable = [
         'user_id',
@@ -26,18 +38,27 @@ class StaffProfile extends Model
         'is_student' => 'boolean',
     ];
 
-    public function user()
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function positions()
+    /**
+     * @return BelongsToMany<Position, $this>
+     */
+    public function positions(): BelongsToMany
     {
         return $this->belongsToMany(Position::class, 'staff_positions', 'staff_id', 'position_id')
             ->orderBy('positions.id');
     }
 
-    public function shifts()
+    /**
+     * @return HasMany<Shift, $this>
+     */
+    public function shifts(): HasMany
     {
         return $this->hasMany(Shift::class, 'staff_id');
     }
