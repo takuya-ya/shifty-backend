@@ -76,6 +76,9 @@ Route::prefix('v1')->group(function () {
 
             Route::put('/staffs/{staff}', [StaffProfileController::class, 'update'])
                 ->name('api.v1.staffs.update');
+
+            Route::delete('/staffs/{staff}', [StaffProfileController::class, 'destroy'])
+                ->name('api.v1.staffs.destroy');
         });
     });
 });

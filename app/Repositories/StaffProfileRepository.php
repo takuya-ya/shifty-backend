@@ -42,4 +42,9 @@ class StaffProfileRepository
 
         return $staff;
     }
+
+    public function delete(StaffProfile $staff): void
+    {
+        $staff->delete();
+    }
 }

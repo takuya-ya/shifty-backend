@@ -29,4 +29,9 @@ class StaffProfileCommandService
     {
         return DB::transaction(fn () => $this->staffProfileRepository->update($staff, $data));
     }
+
+    public function delete(StaffProfile $staff): void
+    {
+        $this->staffProfileRepository->delete($staff);
+    }
 }
