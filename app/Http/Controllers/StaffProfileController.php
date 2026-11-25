@@ -11,6 +11,7 @@ use App\Models\StaffProfile;
 use App\Services\StaffProfile\StaffProfileCommandService;
 use App\Services\StaffProfile\StaffProfileQueryService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class StaffProfileController extends Controller
 {
@@ -38,5 +39,12 @@ class StaffProfileController extends Controller
         $staffProfile = $this->staffProfileCommandService->update($staff, $request->validated());
 
         return $this->success(data: new StaffProfileResource($staffProfile), status: 200);
+    }
+
+    public function destroy(StaffProfile $staff): Response
+    {
+        $this->staffProfileCommandService->delete($staff);
+
+        return response()->noContent();
     }
 }
